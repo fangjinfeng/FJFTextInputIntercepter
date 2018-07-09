@@ -11,7 +11,7 @@
 @implementation NSString (FJFTextInputStringType)
 
 - (BOOL)fjf_isCertainStringType:(FJFTextInputStringType)stringType {
-    return [self moa_matchRegularWith:stringType];
+    return [self fjf_matchRegularWith:stringType];
 }
 
 
@@ -22,7 +22,7 @@
     return YES;
 }
 #pragma mark --- 用正则判断条件
-- (BOOL)moa_matchRegularWith:(FJFTextInputStringType)type {
+- (BOOL)fjf_matchRegularWith:(FJFTextInputStringType)type {
     NSString *regularStr = @"";
     switch (type) {
         case FJFTextInputStringTypeNumber:      //数字
