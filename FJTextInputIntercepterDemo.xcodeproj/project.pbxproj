@@ -15,6 +15,10 @@
 		3063CB9B20ECC22E009B75B1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CB9A20ECC22E009B75B1 /* main.m */; };
 		3063CBA520ECC22E009B75B1 /* FJTextInputIntercepterDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBA420ECC22E009B75B1 /* FJTextInputIntercepterDemoTests.m */; };
 		3063CBB020ECC22E009B75B1 /* FJTextInputIntercepterDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBAF20ECC22E009B75B1 /* FJTextInputIntercepterDemoUITests.m */; };
+		3063CBC620ECC240009B75B1 /* NSString+FJFTextInputStringType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBBF20ECC240009B75B1 /* NSString+FJFTextInputStringType.m */; };
+		3063CBC720ECC240009B75B1 /* NSString+FJFTextInputEmoji.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBC120ECC240009B75B1 /* NSString+FJFTextInputEmoji.m */; };
+		3063CBC920ECC240009B75B1 /* FJFTextInputIntercepter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBC520ECC240009B75B1 /* FJFTextInputIntercepter.m */; };
+		3063CBCC20EE16F2009B75B1 /* FJTextFieldView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBCB20EE16F2009B75B1 /* FJTextFieldView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +55,14 @@
 		3063CBAB20ECC22E009B75B1 /* FJTextInputIntercepterDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FJTextInputIntercepterDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3063CBAF20ECC22E009B75B1 /* FJTextInputIntercepterDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FJTextInputIntercepterDemoUITests.m; sourceTree = "<group>"; };
 		3063CBB120ECC22E009B75B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3063CBBE20ECC240009B75B1 /* NSString+FJFTextInputStringType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FJFTextInputStringType.h"; sourceTree = "<group>"; };
+		3063CBBF20ECC240009B75B1 /* NSString+FJFTextInputStringType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FJFTextInputStringType.m"; sourceTree = "<group>"; };
+		3063CBC020ECC240009B75B1 /* NSString+FJFTextInputEmoji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FJFTextInputEmoji.h"; sourceTree = "<group>"; };
+		3063CBC120ECC240009B75B1 /* NSString+FJFTextInputEmoji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FJFTextInputEmoji.m"; sourceTree = "<group>"; };
+		3063CBC420ECC240009B75B1 /* FJFTextInputIntercepter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FJFTextInputIntercepter.h; sourceTree = "<group>"; };
+		3063CBC520ECC240009B75B1 /* FJFTextInputIntercepter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FJFTextInputIntercepter.m; sourceTree = "<group>"; };
+		3063CBCA20EE16F2009B75B1 /* FJTextFieldView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FJTextFieldView.h; sourceTree = "<group>"; };
+		3063CBCB20EE16F2009B75B1 /* FJTextFieldView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FJTextFieldView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +93,7 @@
 		3063CB7F20ECC22D009B75B1 = {
 			isa = PBXGroup;
 			children = (
+				3063CBBD20ECC240009B75B1 /* FJFTextInputIntercepter */,
 				3063CB8A20ECC22D009B75B1 /* FJTextInputIntercepterDemo */,
 				3063CBA320ECC22E009B75B1 /* FJTextInputIntercepterDemoTests */,
 				3063CBAE20ECC22E009B75B1 /* FJTextInputIntercepterDemoUITests */,
@@ -105,6 +118,8 @@
 				3063CB8C20ECC22D009B75B1 /* AppDelegate.m */,
 				3063CB8E20ECC22D009B75B1 /* ViewController.h */,
 				3063CB8F20ECC22D009B75B1 /* ViewController.m */,
+				3063CBCA20EE16F2009B75B1 /* FJTextFieldView.h */,
+				3063CBCB20EE16F2009B75B1 /* FJTextFieldView.m */,
 				3063CB9120ECC22D009B75B1 /* Main.storyboard */,
 				3063CB9420ECC22E009B75B1 /* Assets.xcassets */,
 				3063CB9620ECC22E009B75B1 /* LaunchScreen.storyboard */,
@@ -130,6 +145,19 @@
 				3063CBB120ECC22E009B75B1 /* Info.plist */,
 			);
 			path = FJTextInputIntercepterDemoUITests;
+			sourceTree = "<group>";
+		};
+		3063CBBD20ECC240009B75B1 /* FJFTextInputIntercepter */ = {
+			isa = PBXGroup;
+			children = (
+				3063CBBE20ECC240009B75B1 /* NSString+FJFTextInputStringType.h */,
+				3063CBBF20ECC240009B75B1 /* NSString+FJFTextInputStringType.m */,
+				3063CBC020ECC240009B75B1 /* NSString+FJFTextInputEmoji.h */,
+				3063CBC120ECC240009B75B1 /* NSString+FJFTextInputEmoji.m */,
+				3063CBC420ECC240009B75B1 /* FJFTextInputIntercepter.h */,
+				3063CBC520ECC240009B75B1 /* FJFTextInputIntercepter.m */,
+			);
+			path = FJFTextInputIntercepter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -262,8 +290,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3063CBC720ECC240009B75B1 /* NSString+FJFTextInputEmoji.m in Sources */,
 				3063CB9020ECC22D009B75B1 /* ViewController.m in Sources */,
+				3063CBCC20EE16F2009B75B1 /* FJTextFieldView.m in Sources */,
 				3063CB9B20ECC22E009B75B1 /* main.m in Sources */,
+				3063CBC620ECC240009B75B1 /* NSString+FJFTextInputStringType.m in Sources */,
+				3063CBC920ECC240009B75B1 /* FJFTextInputIntercepter.m in Sources */,
 				3063CB8D20ECC22D009B75B1 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -436,6 +468,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2PB2XYK7EA;
 				INFOPLIST_FILE = FJTextInputIntercepterDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -453,6 +486,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2PB2XYK7EA;
 				INFOPLIST_FILE = FJTextInputIntercepterDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

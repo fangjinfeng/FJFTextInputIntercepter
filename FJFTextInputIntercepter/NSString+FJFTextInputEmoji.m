@@ -11,7 +11,7 @@
 @implementation NSString (FJFTextInputEmoji)
 
 //是否含有表情
-+ (BOOL)moa_textInputStringContainsEmoji:(NSString *)string {
++ (BOOL)fjf_textInputStringContainsEmoji:(NSString *)string {
     
     __block BOOL returnValue = NO;
     [string enumerateSubstringsInRange:NSMakeRange(0, [string length])
@@ -51,7 +51,7 @@
 
 
 //过滤表情
-+ (NSString *)moa_textInputFilterEmoji:(NSString *)string {
++ (NSString *)fjf_textInputFilterEmoji:(NSString *)string {
     
     NSUInteger len = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
     const char *utf8 = [string UTF8String];

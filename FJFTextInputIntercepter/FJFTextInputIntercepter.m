@@ -7,7 +7,7 @@
 //  Copyright © 2018年 fjf. All rights reserved.
 //
 
-#import "MOATextInputIntercepter.h"
+#import "FJFTextInputIntercepter.h"
 #import <objc/runtime.h>
 //tools
 #import "NSString+FJFTextInputEmoji.h"
@@ -18,20 +18,20 @@
 
 //UITextField
 
-@interface UITextField (MOATextInputIntercepter)
+@interface UITextField (FJFTextInputIntercepter)
 
-@property (nonatomic, strong) MOATextInputIntercepter *yb_textInputIntercepter;
+@property (nonatomic, strong) FJFTextInputIntercepter *yb_textInputIntercepter;
 
 @end
 
 
-@implementation UITextField (MOATextInputIntercepter)
+@implementation UITextField (FJFTextInputIntercepter)
 
-- (void)setYb_textInputIntercepter:(MOATextInputIntercepter *)yb_textInputIntercepter {
+- (void)setYb_textInputIntercepter:(FJFTextInputIntercepter *)yb_textInputIntercepter {
     objc_setAssociatedObject(self, @selector(yb_textInputIntercepter), yb_textInputIntercepter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (MOATextInputIntercepter *)yb_textInputIntercepter {
+- (FJFTextInputIntercepter *)yb_textInputIntercepter {
     return objc_getAssociatedObject(self, @selector(yb_textInputIntercepter));
 }
 
@@ -41,21 +41,21 @@
 
 //UITextView
 
-@interface UITextView (MOATextInputIntercepter)
+@interface UITextView (FJFTextInputIntercepter)
 
-@property (nonatomic, strong) MOATextInputIntercepter *yb_textInputIntercepter;
+@property (nonatomic, strong) FJFTextInputIntercepter *yb_textInputIntercepter;
 
 @end
 
 
-@implementation UITextView (MOATextInputIntercepter)
+@implementation UITextView (FJFTextInputIntercepter)
 
-- (void)setYb_textInputIntercepter:(MOATextInputIntercepter *)yb_textInputIntercepter {
+- (void)setYb_textInputIntercepter:(FJFTextInputIntercepter *)yb_textInputIntercepter {
     
     objc_setAssociatedObject(self, @selector(yb_textInputIntercepter), yb_textInputIntercepter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (MOATextInputIntercepter *)yb_textInputIntercepter {
+- (FJFTextInputIntercepter *)yb_textInputIntercepter {
     
     return objc_getAssociatedObject(self, @selector(yb_textInputIntercepter));
 }
@@ -63,13 +63,13 @@
 @end
 
 
-@interface MOATextInputIntercepter()<UITextViewDelegate, UITextFieldDelegate>
+@interface FJFTextInputIntercepter()<UITextViewDelegate, UITextFieldDelegate>
 // previousText
 @property (nonatomic, strong) NSString *previousText;
 @end
 
-//MOATextInputIntercepter
-@implementation MOATextInputIntercepter
+//FJFTextInputIntercepter
+@implementation FJFTextInputIntercepter
 
 #pragma mark -------------------------- Life  Circle
 
@@ -80,9 +80,9 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _emojiAdmitted = NO;
+        _emojiAdmitted = YES;
         _maxCharacterNum = UINT_MAX;
-        _doubleBytePerChineseCharacter = YES;
+        _doubleBytePerChineseCharacter = NO;
     }
     return self;
 }
@@ -91,18 +91,18 @@
 #pragma mark -------------------------- Public  Methods
 
 - (void)textInputView:(UIView *)textInputView {
-    [MOATextInputIntercepter textInputView:textInputView setInputIntercepter:self];
+    [FJFTextInputIntercepter textInputView:textInputView setInputIntercepter:self];
 }
 
 
-+ (MOATextInputIntercepter *)textInputView:(UIView *)textInputView beyoudLimitBlock:(MOATextInputIntercepterBlock)beyoudLimitBlock {
-    MOATextInputIntercepter *tmpInputIntercepter = [[MOATextInputIntercepter alloc] init];
++ (FJFTextInputIntercepter *)textInputView:(UIView *)textInputView beyoudLimitBlock:(FJFTextInputIntercepterBlock)beyoudLimitBlock {
+    FJFTextInputIntercepter *tmpInputIntercepter = [[FJFTextInputIntercepter alloc] init];
     tmpInputIntercepter.beyoudLimitBlock = [beyoudLimitBlock copy];
     [self textInputView:textInputView setInputIntercepter:tmpInputIntercepter];
     return tmpInputIntercepter;
     
 }
-+ (void)textInputView:(UIView *)textInputView setInputIntercepter:(MOATextInputIntercepter *)intercepter {
++ (void)textInputView:(UIView *)textInputView setInputIntercepter:(FJFTextInputIntercepter *)intercepter {
     
     if ([textInputView isKindOfClass:[UITextField class]]) {
         UITextField *textField = (UITextField *)textInputView;
@@ -168,8 +168,8 @@
     if (finalText.length > 0) {
         textField.text = finalText;
     }
-    else if(self.intercepterNumberType == MOATextInputIntercepterNumberTypeNumberOnly ||
-            self.intercepterNumberType == MOATextInputIntercepterNumberTypeDecimal ||
+    else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly ||
+            self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal ||
             self.isEmojiAdmitted == NO){
         textField.text = inputText;
     }
@@ -313,13 +313,13 @@
     
     NSString *tmpReplacementString = [inputText substringWithRange:NSMakeRange(_previousText.length, (inputText.length - _previousText.length))];
     // 只允许 输入 数字
-    if (self.intercepterNumberType == MOATextInputIntercepterNumberTypeNumberOnly) {
+    if (self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly) {
         if ([tmpReplacementString fjf_isCertainStringType:FJFTextInputStringTypeNumber] == NO) {
             inputText = _previousText;
         }
     }
     // 输入 小数
-    else if(self.intercepterNumberType == MOATextInputIntercepterNumberTypeDecimal){
+    else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal){
         NSRange tmpRange = NSMakeRange(_previousText.length, 0);
         BOOL isCorrect = [self inputText:_previousText shouldChangeCharactersInRange:tmpRange replacementString:tmpReplacementString];
         if (isCorrect == YES) {
@@ -408,14 +408,14 @@
 }
 
 #pragma mark -------------------------- Setter / Getter
-- (void)setIntercepterNumberType:(MOATextInputIntercepterNumberType)intercepterNumberType {
+- (void)setIntercepterNumberType:(FJFTextInputIntercepterNumberType)intercepterNumberType {
     _intercepterNumberType = intercepterNumberType;
     // 小数
-    if (_intercepterNumberType == MOATextInputIntercepterNumberTypeDecimal && (_decimalPlaces == 0)) {
+    if (_intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal && (_decimalPlaces == 0)) {
         _decimalPlaces = 2;
     }
     
-    if (_intercepterNumberType != MOATextInputIntercepterNumberTypeNone) {
+    if (_intercepterNumberType != FJFTextInputIntercepterNumberTypeNone) {
         _doubleBytePerChineseCharacter = NO;
     }
 }

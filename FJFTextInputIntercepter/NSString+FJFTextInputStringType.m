@@ -6,9 +6,9 @@
 //  Copyright © 2018年 fjf. All rights reserved.
 //
 
-#import "NSString+MOATextInputStringType.h"
+#import "NSString+FJFTextInputStringType.h"
 
-@implementation NSString (MOATextInputStringType)
+@implementation NSString (FJFTextInputStringType)
 
 - (BOOL)fjf_isCertainStringType:(FJFTextInputStringType)stringType {
     return [self moa_matchRegularWith:stringType];

@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface FJTextFieldView : UIView
-
+// tipLabel
+@property (nonatomic, strong) UILabel *tipLabel;
+// textField
+@property (nonatomic, strong) UITextField *textField;
 @end

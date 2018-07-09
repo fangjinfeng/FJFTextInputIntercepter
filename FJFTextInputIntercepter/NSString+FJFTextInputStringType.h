@@ -14,7 +14,7 @@ typedef NS_ENUM(NSInteger,FJFTextInputStringType) {
     FJFTextInputStringTypeChinese         //汉字
 };
 
-@interface NSString (MOATextInputStringType)
+@interface NSString (FJFTextInputStringType)
 
 /**
  某个字符串是不是数字、字母、汉字。

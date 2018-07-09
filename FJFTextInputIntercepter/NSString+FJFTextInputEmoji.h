@@ -10,6 +10,6 @@
 
 @interface NSString (FJFTextInputEmoji)
 
-+ (BOOL)moa_textInputStringContainsEmoji:(NSString *)string;
-+ (NSString *)moa_textInputFilterEmoji:(NSString *)string;
++ (BOOL)fjf_textInputStringContainsEmoji:(NSString *)string;
++ (NSString *)fjf_textInputFilterEmoji:(NSString *)string;
 @end
