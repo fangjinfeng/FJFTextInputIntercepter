@@ -73,7 +73,7 @@
     if (!_cardTextFieldView) {
         _cardTextFieldView = [[FJTextFieldView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.nameTextFieldView.frame) + 20, [UIScreen mainScreen].bounds.size.width - 80 - 20, 44)];
         _cardTextFieldView.tipLabel.text = @"卡号:";
-        _cardTextFieldView.textField.placeholder = @"请输入卡号";
+        _cardTextFieldView.textField.placeholder = @"请输入卡号(只限数字)";
         FJFTextInputIntercepter *intercepter = [[FJFTextInputIntercepter alloc] init];
         intercepter.maxCharacterNum = 16;
         intercepter.intercepterNumberType = FJFTextInputIntercepterNumberTypeNumberOnly;
@@ -92,10 +92,10 @@
     if (!_moneyTextFieldView) {
         _moneyTextFieldView = [[FJTextFieldView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.cardTextFieldView.frame) + 20, [UIScreen mainScreen].bounds.size.width - 80 - 20, 44)];
         _moneyTextFieldView.tipLabel.text = @"金额:";
-        _moneyTextFieldView.textField.placeholder = @"请输入金额";
+        _moneyTextFieldView.textField.placeholder = @"请输入金额(最多9位数，保留2位小数)";
         FJFTextInputIntercepter *intercepter = [[FJFTextInputIntercepter alloc] init];
         intercepter.maxCharacterNum = 9;
-        intercepter.decimalPlaces = 3;
+        intercepter.decimalPlaces = 2;
         intercepter.intercepterNumberType = FJFTextInputIntercepterNumberTypeDecimal;
         intercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
             NSLog(@"最多只能输入9位数字");
@@ -131,7 +131,7 @@
         _passwordTextFieldView.textField.placeholder = @"请输入您的密码";
         _passwordTextFieldView.textField.secureTextEntry = YES;
         FJFTextInputIntercepter *intercepter = [[FJFTextInputIntercepter alloc] init];
-        intercepter.maxCharacterNum = 16.0f;
+        intercepter.maxCharacterNum = 16;
         intercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
             NSLog(@"最多只能输入16位密码");
         };
