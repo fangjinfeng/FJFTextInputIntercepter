@@ -58,6 +58,7 @@
         _nameTextFieldView.textField.placeholder = @"请输入姓名(汉字5个字，英文10个字母)";
         FJFTextInputIntercepter *intercepter = [[FJFTextInputIntercepter alloc] init];
         intercepter.maxCharacterNum = 10;
+        intercepter.emojiAdmitted = NO;
         intercepter.doubleBytePerChineseCharacter = NO;
         intercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
             NSLog(@"最多只能输入汉字5个字，英文10个字母");
