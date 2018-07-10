@@ -1,6 +1,3 @@
-
-
-
 //
 //  FJTextFieldView.m
 //  FJTextInputIntercepterDemo

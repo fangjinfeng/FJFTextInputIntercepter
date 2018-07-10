@@ -13,6 +13,7 @@
 typedef void(^FJFTextInputIntercepterBlock) (FJFTextInputIntercepter *textInputIntercepter, NSString *string);
 
 typedef NS_ENUM(NSUInteger, FJFTextInputIntercepterNumberType) {
+    // 非数字
     FJFTextInputIntercepterNumberTypeNone = 0,
     // 只允许 数字
     FJFTextInputIntercepterNumberTypeNumberOnly,
@@ -26,7 +27,8 @@ typedef NS_ENUM(NSUInteger, FJFTextInputIntercepterNumberType) {
 // maxCharacterNum 限制 最大 字符
 @property (nonatomic, assign) NSUInteger maxCharacterNum;
 
-// decimalPlaces 小数 位数 (当intercepterNumberType 为FJFTextInputIntercepterNumberTypeDecimal 有用)
+// decimalPlaces 小数 位数
+// (当intercepterNumberType 为FJFTextInputIntercepterNumberTypeDecimal 有用)
 @property (nonatomic, assign) NSUInteger decimalPlaces;
 
 // beyoudLimitBlock
@@ -38,7 +40,6 @@ typedef NS_ENUM(NSUInteger, FJFTextInputIntercepterNumberType) {
 // intercepterNumberType 数字 类型
 @property (nonatomic, assign) FJFTextInputIntercepterNumberType  intercepterNumberType;
 
-
 /**
   doubleBytePerChineseCharacter 为 NO
  字母、数字、汉字都是1个字节 表情是两个字节
@@ -48,9 +49,28 @@ typedef NS_ENUM(NSUInteger, FJFTextInputIntercepterNumberType) {
  */
 @property (nonatomic, assign, getter=isDoubleBytePerChineseCharacter) BOOL doubleBytePerChineseCharacter;
 
+/**
+ 设置 需要 拦截的输入框
+
+ @param textInputView 输入框
+ */
 - (void)textInputView:(UIView *)textInputView;
 
-+ (FJFTextInputIntercepter *)textInputView:(UIView *)textInputView beyoudLimitBlock:(FJFTextInputIntercepterBlock)beyoudLimitBlock;
 
+/**
+ 设置 拦截器和拦截的输入框
+
+ @param textInputView 输入框
+ @param intercepter 拦截器
+ */
 + (void)textInputView:(UIView *)textInputView setInputIntercepter:(FJFTextInputIntercepter *)intercepter;
+
+/**
+ 生成 输入框 拦截器
+
+ @param textInputView 需要限制的输入框
+ @param beyoudLimitBlock 超过限制 回调
+ @return 生成 输入框 拦截器
+ */
++ (FJFTextInputIntercepter *)textInputView:(UIView *)textInputView beyoudLimitBlock:(FJFTextInputIntercepterBlock)beyoudLimitBlock;
 @end
