@@ -1,6 +1,6 @@
 
 //
-//  YBInputViewObserver.m
+//  FJFTextInputIntercepter.m
 //  FJTextInputIntercepterDemo
 //
 //  Created by fjf on 2018/7/4.
@@ -9,8 +9,7 @@
 
 #import "FJFTextInputIntercepter.h"
 #import <objc/runtime.h>
-//tools
-#import "NSString+FJFTextInputEmoji.h"
+// category
 #import "NSString+FJFTextInputStringType.h"
 
 
@@ -80,7 +79,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _emojiAdmitted = NO;
+        _emojiAdmitted = YES;
         _maxCharacterNum = UINT_MAX;
         _doubleBytePerChineseCharacter = NO;
     }
@@ -158,7 +157,7 @@
                                                             offset:0];
     
     inputText = [self handleWithInputText:inputText];
-    
+
     NSString *finalText = [self finalTextAfterProcessingWithInput:inputText
                                                   maxCharacterNum:self.maxCharacterNum
                                                   primaryLanguage:primaryLanguage
@@ -173,9 +172,7 @@
             self.isEmojiAdmitted == NO){
         textField.text = inputText;
     }
-    
      _previousText = textField.text;
-    
 }
 
 - (void)textViewTextDidChangeWithNotification:(NSNotification *)noti {
@@ -332,9 +329,9 @@
         }
     }
     // 不允许 输入 表情
-    else if (!self.isEmojiAdmitted) {
-        inputText =  [self disable_emoji:inputText];
-        inputText = [NSString fjf_textInputFilterEmoji:inputText];
+    else if (!self.isEmojiAdmitted && [tmpReplacementString fjf_isSpecialLetter]) {
+        inputText =  _previousText;
+//        inputText = [NSString fjf_textInputFilterEmoji:inputText];
     }
     
     return inputText;
@@ -395,17 +392,6 @@
 }
 
 
-/**
- *  过滤字符串中的emoji
- */
-- (NSString *)disable_emoji:(NSString *)text{
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[^\\u0020-\\u007E\\u00A0-\\u00BE\\u2E80-\\uA4CF\\uF900-\\uFAFF\\uFE30-\\uFE4F\\uFF00-\\uFFEF\\u0080-\\u009F\\u2000-\\u201f\r\n]"options:NSRegularExpressionCaseInsensitive error:nil];
-    NSString *modifiedString = [regex stringByReplacingMatchesInString:text
-                                                               options:0
-                                                                 range:NSMakeRange(0, [text length])
-                                                          withTemplate:@""];
-    return modifiedString;
-}
 
 #pragma mark -------------------------- Setter / Getter
 - (void)setIntercepterNumberType:(FJFTextInputIntercepterNumberType)intercepterNumberType {

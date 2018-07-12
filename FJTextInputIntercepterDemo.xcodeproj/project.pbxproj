@@ -16,7 +16,6 @@
 		3063CBA520ECC22E009B75B1 /* FJTextInputIntercepterDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBA420ECC22E009B75B1 /* FJTextInputIntercepterDemoTests.m */; };
 		3063CBB020ECC22E009B75B1 /* FJTextInputIntercepterDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBAF20ECC22E009B75B1 /* FJTextInputIntercepterDemoUITests.m */; };
 		3063CBC620ECC240009B75B1 /* NSString+FJFTextInputStringType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBBF20ECC240009B75B1 /* NSString+FJFTextInputStringType.m */; };
-		3063CBC720ECC240009B75B1 /* NSString+FJFTextInputEmoji.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBC120ECC240009B75B1 /* NSString+FJFTextInputEmoji.m */; };
 		3063CBC920ECC240009B75B1 /* FJFTextInputIntercepter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBC520ECC240009B75B1 /* FJFTextInputIntercepter.m */; };
 		3063CBCC20EE16F2009B75B1 /* FJTextFieldView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBCB20EE16F2009B75B1 /* FJTextFieldView.m */; };
 /* End PBXBuildFile section */
@@ -57,8 +56,6 @@
 		3063CBB120ECC22E009B75B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3063CBBE20ECC240009B75B1 /* NSString+FJFTextInputStringType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FJFTextInputStringType.h"; sourceTree = "<group>"; };
 		3063CBBF20ECC240009B75B1 /* NSString+FJFTextInputStringType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FJFTextInputStringType.m"; sourceTree = "<group>"; };
-		3063CBC020ECC240009B75B1 /* NSString+FJFTextInputEmoji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FJFTextInputEmoji.h"; sourceTree = "<group>"; };
-		3063CBC120ECC240009B75B1 /* NSString+FJFTextInputEmoji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FJFTextInputEmoji.m"; sourceTree = "<group>"; };
 		3063CBC420ECC240009B75B1 /* FJFTextInputIntercepter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FJFTextInputIntercepter.h; sourceTree = "<group>"; };
 		3063CBC520ECC240009B75B1 /* FJFTextInputIntercepter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FJFTextInputIntercepter.m; sourceTree = "<group>"; };
 		3063CBCA20EE16F2009B75B1 /* FJTextFieldView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FJTextFieldView.h; sourceTree = "<group>"; };
@@ -152,8 +149,6 @@
 			children = (
 				3063CBBE20ECC240009B75B1 /* NSString+FJFTextInputStringType.h */,
 				3063CBBF20ECC240009B75B1 /* NSString+FJFTextInputStringType.m */,
-				3063CBC020ECC240009B75B1 /* NSString+FJFTextInputEmoji.h */,
-				3063CBC120ECC240009B75B1 /* NSString+FJFTextInputEmoji.m */,
 				3063CBC420ECC240009B75B1 /* FJFTextInputIntercepter.h */,
 				3063CBC520ECC240009B75B1 /* FJFTextInputIntercepter.m */,
 			);
@@ -290,7 +285,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3063CBC720ECC240009B75B1 /* NSString+FJFTextInputEmoji.m in Sources */,
 				3063CB9020ECC22D009B75B1 /* ViewController.m in Sources */,
 				3063CBCC20EE16F2009B75B1 /* FJTextFieldView.m in Sources */,
 				3063CB9B20ECC22E009B75B1 /* main.m in Sources */,
@@ -473,7 +467,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = FJF.FJTextInputIntercepterDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = FJF.test.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -491,7 +485,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = FJF.FJTextInputIntercepterDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = FJF.test.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

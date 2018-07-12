@@ -1,5 +1,5 @@
 //
-//  NSString+ValidateNumber.h
+//  NSString+FJFTextInputStringType.h
 //  FJTextInputIntercepterDemo
 //
 //  Created by fjf on 2018/7/4.
@@ -11,7 +11,8 @@
 typedef NS_ENUM(NSInteger,FJFTextInputStringType) {
     FJFTextInputStringTypeNumber,         //数字
     FJFTextInputStringTypeLetter,         //字母
-    FJFTextInputStringTypeChinese         //汉字
+    FJFTextInputStringTypeChinese,        //汉字
+    FJFTextInputStringTypeEmoji,          //表情
 };
 
 @interface NSString (FJFTextInputStringType)

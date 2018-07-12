@@ -113,12 +113,12 @@
         _accountTextFieldView = [[FJTextFieldView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.moneyTextFieldView.frame) + 20, [UIScreen mainScreen].bounds.size.width - 80 - 20, 44)];
         _accountTextFieldView.textField.placeholder = @"请输入您的账号";
         FJFTextInputIntercepter *intercepter = [[FJFTextInputIntercepter alloc] init];
-        intercepter.emojiAdmitted = NO;
         intercepter.maxCharacterNum = 16.0f;
         intercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
             NSLog(@"最多只能输入16位账号");
         };
         [FJFTextInputIntercepter textInputView:_accountTextFieldView.textField setInputIntercepter:intercepter];
+        
     }
     return  _accountTextFieldView;
 }

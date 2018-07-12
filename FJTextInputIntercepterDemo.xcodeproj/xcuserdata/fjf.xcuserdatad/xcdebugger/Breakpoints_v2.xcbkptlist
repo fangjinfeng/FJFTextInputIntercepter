@@ -14,35 +14,13 @@
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
          <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MOATextInputIntercepter/MOATextInputIntercepter.m"
-            timestampString = "552796158.055007"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "204"
-            endingLineNumber = "204"
-            landmarkName = "-textViewTextDidChangeWithNotification:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MOATextInputIntercepter/MOATextInputIntercepter.m"
-            timestampString = "552796158.0553859"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
-            landmarkName = "-textViewTextDidChangeWithNotification:"
-            landmarkType = "7">
+            scope = "0"
+            stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -52,27 +30,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FJFTextInputIntercepter/FJFTextInputIntercepter.m"
-            timestampString = "552918704.04283"
+            timestampString = "553071278.2225471"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "346"
-            endingLineNumber = "346"
-            landmarkName = "-inputText:shouldChangeCharactersInRange:replacementString:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FJFTextInputIntercepter/FJFTextInputIntercepter.m"
-            timestampString = "552918704.0433249"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "314"
-            endingLineNumber = "314"
+            startingLineNumber = "313"
+            endingLineNumber = "313"
             landmarkName = "-handleWithInputText:"
             landmarkType = "7">
          </BreakpointContent>
@@ -84,28 +46,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FJFTextInputIntercepter/FJFTextInputIntercepter.m"
-            timestampString = "552918704.04364"
+            timestampString = "553071278.222617"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "265"
-            endingLineNumber = "265"
-            landmarkName = "-doubleBytePerChineseCharacterSubString:maxCharacterNum:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FJFTextInputIntercepter/FJFTextInputIntercepter.m"
-            timestampString = "552918704.043939"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
-            landmarkName = "-processingTextWithInput:maxCharacterNum:isDoubleBytePerChineseCharacter:"
+            startingLineNumber = "201"
+            endingLineNumber = "201"
+            landmarkName = "-textViewTextDidChangeWithNotification:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
