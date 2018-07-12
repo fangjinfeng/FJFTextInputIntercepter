@@ -79,9 +79,10 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _emojiAdmitted = YES;
+        _emojiAdmitted = NO;
         _maxCharacterNum = UINT_MAX;
         _doubleBytePerChineseCharacter = NO;
+        _intercepterNumberType = FJFTextInputIntercepterNumberTypeNone;
     }
     return self;
 }
