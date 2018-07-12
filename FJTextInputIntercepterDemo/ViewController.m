@@ -63,7 +63,7 @@
         intercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
             NSLog(@"最多只能输入汉字5个字，英文10个字母");
         };
-        [FJFTextInputIntercepter textInputView:_nameTextFieldView.textField setInputIntercepter:intercepter];
+        [intercepter textInputView:_nameTextFieldView.textField];
     }
     return  _nameTextFieldView;
 }
@@ -81,7 +81,7 @@
         intercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
             NSLog(@"最多只能输入16位卡号");
         };
-        [FJFTextInputIntercepter textInputView:_cardTextFieldView.textField setInputIntercepter:intercepter];
+        [intercepter textInputView:_cardTextFieldView.textField];
     }
     return  _cardTextFieldView;
 }
@@ -95,13 +95,16 @@
         _moneyTextFieldView.tipLabel.text = @"金额:";
         _moneyTextFieldView.textField.placeholder = @"请输入金额(最多9位数，保留2位小数)";
         FJFTextInputIntercepter *intercepter = [[FJFTextInputIntercepter alloc] init];
+        // 最多输入9位数
         intercepter.maxCharacterNum = 9;
+        // 保留两位小数
         intercepter.decimalPlaces = 2;
+        // 分数类型
         intercepter.intercepterNumberType = FJFTextInputIntercepterNumberTypeDecimal;
         intercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
             NSLog(@"最多只能输入9位数字");
         };
-        [FJFTextInputIntercepter textInputView:_moneyTextFieldView.textField setInputIntercepter:intercepter];
+        [intercepter textInputView:_moneyTextFieldView.textField];
     }
     return  _moneyTextFieldView;
 }
@@ -117,8 +120,7 @@
         intercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
             NSLog(@"最多只能输入16位账号");
         };
-        [FJFTextInputIntercepter textInputView:_accountTextFieldView.textField setInputIntercepter:intercepter];
-        
+         [intercepter textInputView:_accountTextFieldView.textField];
     }
     return  _accountTextFieldView;
 }
