@@ -199,6 +199,11 @@
     if (finalText.length > 0) {
         textView.text = finalText;
     }
+    else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly ||
+            self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal ||
+            self.isEmojiAdmitted == NO){
+        textView.text = inputText;
+    }
 
     _previousText = textView.text;
 }

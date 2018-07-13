@@ -48,23 +48,23 @@
 ```
 // moneyTextFieldView
 - (FJTextFieldView *)moneyTextFieldView {
-if (!_moneyTextFieldView) {
-_moneyTextFieldView = [[FJTextFieldView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.cardTextFieldView.frame) + 20, [UIScreen mainScreen].bounds.size.width - 80 - 20, 44)];
-_moneyTextFieldView.tipLabel.text = @"金额:";
-_moneyTextFieldView.textField.placeholder = @"请输入金额(最多9位数，保留2位小数)";
-FJFTextInputIntercepter *intercepter = [[FJFTextInputIntercepter alloc] init];
-// 最多输入9位数
-intercepter.maxCharacterNum = 9;
-// 保留两位小数
-intercepter.decimalPlaces = 2;
-// 分数类型
-intercepter.intercepterNumberType = FJFTextInputIntercepterNumberTypeDecimal;
-intercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
-NSLog(@"最多只能输入9位数字");
-};
-[intercepter textInputView:_moneyTextFieldView.textField];
-}
-return  _moneyTextFieldView;
+    if (!_moneyTextFieldView) {
+        _moneyTextFieldView = [[FJTextFieldView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.cardTextFieldView.frame) + 20, [UIScreen mainScreen].bounds.size.width - 80 - 20, 44)];
+        _moneyTextFieldView.tipLabel.text = @"金额:";
+        _moneyTextFieldView.textField.placeholder = @"请输入金额(最多9位数，保留2位小数)";
+        FJFTextInputIntercepter *intercepter = [[FJFTextInputIntercepter alloc] init];
+        // 最多输入9位数
+        intercepter.maxCharacterNum = 9;
+        // 保留两位小数
+        intercepter.decimalPlaces = 2;
+        // 分数类型
+        intercepter.intercepterNumberType = FJFTextInputIntercepterNumberTypeDecimal;
+        intercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
+        NSLog(@"最多只能输入9位数字");
+        };
+        [intercepter textInputView:_moneyTextFieldView.textField];
+        }
+    return  _moneyTextFieldView;
 }
 
 ```
@@ -168,38 +168,38 @@ _intercepterNumberType = FJFTextInputIntercepterNumberTypeNone;
 #pragma mark -------------------------- Public  Methods
 
 - (void)textInputView:(UIView *)textInputView {
-[FJFTextInputIntercepter textInputView:textInputView setInputIntercepter:self];
+    [FJFTextInputIntercepter textInputView:textInputView setInputIntercepter:self];
 }
 
 
 + (FJFTextInputIntercepter *)textInputView:(UIView *)textInputView beyoudLimitBlock:(FJFTextInputIntercepterBlock)beyoudLimitBlock {
-FJFTextInputIntercepter *tmpInputIntercepter = [[FJFTextInputIntercepter alloc] init];
-tmpInputIntercepter.beyoudLimitBlock = [beyoudLimitBlock copy];
-[self textInputView:textInputView setInputIntercepter:tmpInputIntercepter];
-return tmpInputIntercepter;
+    FJFTextInputIntercepter *tmpInputIntercepter = [[FJFTextInputIntercepter alloc] init];
+    tmpInputIntercepter.beyoudLimitBlock = [beyoudLimitBlock copy];
+    [self textInputView:textInputView setInputIntercepter:tmpInputIntercepter];
+    return tmpInputIntercepter;
 
 }
 
 
 + (void)textInputView:(UIView *)textInputView setInputIntercepter:(FJFTextInputIntercepter *)intercepter {
 
-if ([textInputView isKindOfClass:[UITextField class]]) {
-UITextField *textField = (UITextField *)textInputView;
+    if ([textInputView isKindOfClass:[UITextField class]]) {
+        UITextField *textField = (UITextField *)textInputView;
 
-textField.yb_textInputIntercepter = intercepter;
-[[NSNotificationCenter defaultCenter] addObserver:intercepter
-selector:@selector(textInputDidChangeWithNotification:)
-name:UITextFieldTextDidChangeNotification
-object:textInputView];
+        textField.yb_textInputIntercepter = intercepter;
+        [[NSNotificationCenter defaultCenter] addObserver:intercepter
+        selector:@selector(textInputDidChangeWithNotification:)
+        name:UITextFieldTextDidChangeNotification
+        object:textInputView];
 
-} else if ([textInputView isKindOfClass:[UITextView class]]) {
-UITextView *textView = (UITextView *)textInputView;
-textView.yb_textInputIntercepter = intercepter;
-[[NSNotificationCenter defaultCenter] addObserver:intercepter
-selector:@selector(textInputDidChangeWithNotification:)
-name:UITextViewTextDidChangeNotification
-object:textInputView];
-}
+    } else if ([textInputView isKindOfClass:[UITextView class]]) {
+        UITextView *textView = (UITextView *)textInputView;
+        textView.yb_textInputIntercepter = intercepter;
+        [[NSNotificationCenter defaultCenter] addObserver:intercepter
+        selector:@selector(textInputDidChangeWithNotification:)
+        name:UITextViewTextDidChangeNotification
+        object:textInputView];
+    }
 }
 ```
 
@@ -213,23 +213,23 @@ object:textInputView];
 ```
 #pragma mark -------------------------- Noti  Methods
 - (void)textInputDidChangeWithNotification:(NSNotification *)noti {
-if (![((UIView *)noti.object) isFirstResponder]) {
-return;
-}
+    if (![((UIView *)noti.object) isFirstResponder]) {
+        return;
+    }
 
-BOOL textFieldTextDidChange = [noti.name isEqualToString:UITextFieldTextDidChangeNotification] &&
-[noti.object isKindOfClass:[UITextField class]];
-BOOL textViewTextDidChange = [noti.name isEqualToString:UITextViewTextDidChangeNotification] &&
-[noti.object isKindOfClass:[UITextView class]];
-if (!textFieldTextDidChange && !textViewTextDidChange) {
-return;
-}
+    BOOL textFieldTextDidChange = [noti.name isEqualToString:UITextFieldTextDidChangeNotification] &&
+    [noti.object isKindOfClass:[UITextField class]];
+    BOOL textViewTextDidChange = [noti.name isEqualToString:UITextViewTextDidChangeNotification] &&
+    [noti.object isKindOfClass:[UITextView class]];
+    if (!textFieldTextDidChange && !textViewTextDidChange) {
+        return;
+    }
 
-if ([noti.name isEqualToString:UITextFieldTextDidChangeNotification]) {
-[self textFieldTextDidChangeWithNotification:noti];
-} else if ([noti.name isEqualToString:UITextViewTextDidChangeNotification]) {
-[self textViewTextDidChangeWithNotification:noti];
-}
+    if ([noti.name isEqualToString:UITextFieldTextDidChangeNotification]) {
+        [self textFieldTextDidChangeWithNotification:noti];
+    } else if ([noti.name isEqualToString:UITextViewTextDidChangeNotification]) {
+    [self textViewTextDidChangeWithNotification:noti];
+    }
 }
 ```
 该函数主要对是否为`当前第一响应者`和`通知名称`是否匹配进行判断，然后`调用输入框类型`对应的`通知处理方法`。
@@ -241,55 +241,60 @@ if ([noti.name isEqualToString:UITextFieldTextDidChangeNotification]) {
 
 - (void)textFieldTextDidChangeWithNotification:(NSNotification *)noti {
 
-UITextField *textField = (UITextField *)noti.object;
-NSString *inputText = textField.text;
-NSString *primaryLanguage = [textField.textInputMode primaryLanguage];
-//获取高亮部分
-UITextRange *selectedRange = [textField markedTextRange];
-UITextPosition *textPosition = [textField positionFromPosition:selectedRange.start
+    UITextField *textField = (UITextField *)noti.object;
+    NSString *inputText = textField.text;
+    NSString *primaryLanguage = [textField.textInputMode primaryLanguage];
+    //获取高亮部分
+    UITextRange *selectedRange = [textField markedTextRange];
+    UITextPosition *textPosition = [textField positionFromPosition:selectedRange.start
 offset:0];
 
-inputText = [self handleWithInputText:inputText];
+    inputText = [self handleWithInputText:inputText];
 
-NSString *finalText = [self finalTextAfterProcessingWithInput:inputText
-maxCharacterNum:self.maxCharacterNum
-primaryLanguage:primaryLanguage
-textPosition:textPosition
-isDoubleBytePerChineseCharacter:self.isDoubleBytePerChineseCharacter];
-if (finalText.length > 0) {
-textField.text = finalText;
-}
-else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly ||
-self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal ||
-self.isEmojiAdmitted == NO){
-textField.text = inputText;
-}
+    NSString *finalText = [self finalTextAfterProcessingWithInput:inputText
+                                                 maxCharacterNum:self.maxCharacterNum
+                                                 primaryLanguage:primaryLanguage
+                                                 textPosition:textPosition
+                                                 isDoubleBytePerChineseCharacter:self.isDoubleBytePerChineseCharacter];
+   if (finalText.length > 0) {
+    textField.text = finalText;
+   }
+   else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly ||
+        self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal ||
+        self.isEmojiAdmitted == NO){
+        textField.text = inputText;
+    }
 _previousText = textField.text;
 }
 
 - (void)textViewTextDidChangeWithNotification:(NSNotification *)noti {
 
-UITextView *textView = (UITextView *)noti.object;
-NSString *inputText = textView.text;
-NSString *primaryLanguage = [textView.textInputMode primaryLanguage];
-//获取高亮部分
-UITextRange *selectedRange = [textView markedTextRange];
-UITextPosition *textPosition = [textView positionFromPosition:selectedRange.start
+    UITextView *textView = (UITextView *)noti.object;
+    NSString *inputText = textView.text;
+    NSString *primaryLanguage = [textView.textInputMode primaryLanguage];
+    //获取高亮部分
+    UITextRange *selectedRange = [textView markedTextRange];
+    UITextPosition *textPosition = [textView positionFromPosition:selectedRange.start
 offset:0];
 
-inputText = [self handleWithInputText:inputText];
+    inputText = [self handleWithInputText:inputText];
 
-NSString *finalText = [self finalTextAfterProcessingWithInput:inputText
-maxCharacterNum:self.maxCharacterNum
-primaryLanguage:primaryLanguage
-textPosition:textPosition
-isDoubleBytePerChineseCharacter:self.isDoubleBytePerChineseCharacter];
+    NSString *finalText = [self finalTextAfterProcessingWithInput:inputText
+                                                    maxCharacterNum:self.maxCharacterNum
+                                                    primaryLanguage:primaryLanguage
+                                                    textPosition:textPosition
+                                                    isDoubleBytePerChineseCharacter:self.isDoubleBytePerChineseCharacter];
 
-if (finalText.length > 0) {
-textView.text = finalText;
-}
+    if (finalText.length > 0) {
+        textView.text = finalText;
+    }
+    else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly ||
+        self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal ||
+        self.isEmojiAdmitted == NO){
+        textView.text = inputText;
+    }
 
-_previousText = textView.text;
+    _previousText = textView.text;
 }
 ```
 `通知处理方法`内部分别获取`当前语言类型`、和`高亮部分`，然后调用`输入文本的处理方法:handleWithInputText`和`最大输入字符的截取方法:finalTextAfterProcessingWithInput`。
@@ -299,36 +304,36 @@ _previousText = textView.text;
 ```
 // 处理 输入 字符串
 - (NSString *)handleWithInputText:(NSString *)inputText {
-if (_previousText.length >= inputText.length) {
-return inputText;
-}
+    if (_previousText.length >= inputText.length) {
+        return inputText;
+    }
 
-NSString *tmpReplacementString = [inputText substringWithRange:NSMakeRange(_previousText.length, (inputText.length - _previousText.length))];
-// 只允许 输入 数字
-if (self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly) {
-if ([tmpReplacementString fjf_isCertainStringType:FJFTextInputStringTypeNumber] == NO) {
-inputText = _previousText;
-}
-}
-// 输入 小数
-else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal){
-NSRange tmpRange = NSMakeRange(_previousText.length, 0);
-BOOL isCorrect = [self inputText:_previousText shouldChangeCharactersInRange:tmpRange replacementString:tmpReplacementString];
-if (isCorrect == YES) {
-if (inputText.length == self.maxCharacterNum && [tmpReplacementString isEqualToString:@"."]) {
-inputText = _previousText;
-}
-}
-else {
-inputText = _previousText;
-}
-}
-// 不允许 输入 表情
-else if (!self.isEmojiAdmitted && [tmpReplacementString fjf_isSpecialLetter]) {
-inputText =  _previousText;
-}
+    NSString *tmpReplacementString = [inputText substringWithRange:NSMakeRange(_previousText.length, (inputText.length - _previousText.length))];
+    // 只允许 输入 数字
+    if (self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly) {
+        if ([tmpReplacementString fjf_isCertainStringType:FJFTextInputStringTypeNumber] == NO) {
+            inputText = _previousText;
+        }
+    }
+    // 输入 小数
+    else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal){
+        NSRange tmpRange = NSMakeRange(_previousText.length, 0);
+        BOOL isCorrect = [self inputText:_previousText shouldChangeCharactersInRange:tmpRange replacementString:tmpReplacementString];
+        if (isCorrect == YES) {
+            if (inputText.length == self.maxCharacterNum && [tmpReplacementString isEqualToString:@"."]) {
+                inputText = _previousText;
+            }
+        }
+        else {
+            inputText = _previousText;
+        }
+    }
+    // 不允许 输入 表情
+    else if (!self.isEmojiAdmitted && [tmpReplacementString fjf_isSpecialLetter]) {
+        inputText =  _previousText;
+    }
 
-return inputText;
+    return inputText;
 }
 ```
 
@@ -343,23 +348,23 @@ isDoubleBytePerChineseCharacter:(BOOL)isDoubleBytePerChineseCharacter {
 
 
 
-NSString *finalText = nil;
-if ([primaryLanguage isEqualToString:@"zh-Hans"] ||
-[primaryLanguage isEqualToString:@"zh-Hant"]) { // 简繁体中文输入
-// 没有高亮选择的字，则对已输入的文字进行字数统计和限制
-if (!textPosition) {
-finalText = [self processingTextWithInput:inputText
-maxCharacterNum:maxCharacterNum
-isDoubleBytePerChineseCharacter:isDoubleBytePerChineseCharacter];
-}
+    NSString *finalText = nil;
+    if ([primaryLanguage isEqualToString:@"zh-Hans"] ||
+    [primaryLanguage isEqualToString:@"zh-Hant"]) { // 简繁体中文输入
+        // 没有高亮选择的字，则对已输入的文字进行字数统计和限制
+        if (!textPosition) {
+        finalText = [self processingTextWithInput:inputText
+                                    maxCharacterNum:maxCharacterNum
+                                    isDoubleBytePerChineseCharacter:isDoubleBytePerChineseCharacter];
+                                    }
 
-} else { // 中文输入法以外的直接对其统计限制即可，不考虑其他语种情况
-finalText = [self processingTextWithInput:inputText
-maxCharacterNum:maxCharacterNum
-isDoubleBytePerChineseCharacter:isDoubleBytePerChineseCharacter];
-}
+    } else { // 中文输入法以外的直接对其统计限制即可，不考虑其他语种情况
+        finalText = [self processingTextWithInput:inputText
+                                maxCharacterNum:maxCharacterNum
+                                isDoubleBytePerChineseCharacter:isDoubleBytePerChineseCharacter];
+    }
 
-return finalText;
+    return finalText;
 }
 ```
 这段代码里面判断了是否为`简繁体中文输入`，如果`不是简繁体中文输入`，直接调用`processingTextWithInput方法`对`已输入的文字`进行`字数`和`统计`的限制，如果是`简繁体中文输入`，判断是否为`高亮选择`的字，`如果不是高亮选择`的字，对`已输入的文字`进行`字数`和`统计的限制`。
@@ -370,26 +375,26 @@ return finalText;
 maxCharacterNum:(NSUInteger)maxCharacterNum
 isDoubleBytePerChineseCharacter:(BOOL)isDoubleBytePerChineseCharacter {
 
-NSString *processingText = nil;
+    NSString *processingText = nil;
 
-if (isDoubleBytePerChineseCharacter) { //如果一个汉字是双字节
-processingText = [self doubleBytePerChineseCharacterSubString:inputText
-maxCharacterNum:maxCharacterNum];
-} else {
-if (inputText.length > maxCharacterNum) {
-NSRange rangeIndex = [inputText rangeOfComposedCharacterSequenceAtIndex:maxCharacterNum];
-if (rangeIndex.length == 1) {
-processingText = [inputText substringToIndex:maxCharacterNum];
-} else {
-NSRange rangeRange = [inputText rangeOfComposedCharacterSequencesForRange:NSMakeRange(0, maxCharacterNum)];
-processingText = [inputText substringWithRange:rangeRange];
-}
-if (self.beyoudLimitBlock) {
-self.beyoudLimitBlock(self, processingText);
-}
-}
-}
-return processingText;
+    if (isDoubleBytePerChineseCharacter) { //如果一个汉字是双字节
+        processingText = [self doubleBytePerChineseCharacterSubString:inputText
+                                                        maxCharacterNum:maxCharacterNum];
+    } else {
+        if (inputText.length > maxCharacterNum) {
+        NSRange rangeIndex = [inputText rangeOfComposedCharacterSequenceAtIndex:maxCharacterNum];
+            if (rangeIndex.length == 1) {
+                processingText = [inputText substringToIndex:maxCharacterNum];
+            } else {
+                NSRange rangeRange = [inputText rangeOfComposedCharacterSequencesForRange:NSMakeRange(0, maxCharacterNum)];
+                processingText = [inputText substringWithRange:rangeRange];
+            }
+            if (self.beyoudLimitBlock) {
+                self.beyoudLimitBlock(self, processingText);
+            }
+        }
+    }
+    return processingText;
 }
 ```
 
