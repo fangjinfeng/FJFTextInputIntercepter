@@ -204,6 +204,7 @@
 }
 
 // 核心代码
+// 对简体 中文 输入
 - (NSString *)finalTextAfterProcessingWithInput:(NSString *)inputText
                                 maxCharacterNum:(NSUInteger)maxCharacterNum
                                 primaryLanguage:(NSString *)primaryLanguage
@@ -259,10 +260,9 @@
 
 - (NSString *)doubleBytePerChineseCharacterSubString:(NSString*)string
                                      maxCharacterNum:(NSUInteger)maxCharacterNum {
-    
+    // 允许 表情
     if (self.emojiAdmitted) {
-        //---字节处理
-        //Limit
+        // 调用 UTF8 编码处理 一个字符一个字节 一个汉字3个字节 一个表情4个字节
         NSUInteger textBytesLength = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
         if (textBytesLength > maxCharacterNum) {
             NSRange range;
@@ -279,7 +279,9 @@
             return string;
         }
     }
+    // 不允许 输入 表情
     else {
+        // 一个字符一个字节 一个汉字2个字节
         NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
         NSData *data = [string dataUsingEncoding:encoding];
         NSInteger length = [data length];
@@ -332,7 +334,6 @@
     // 不允许 输入 表情
     else if (!self.isEmojiAdmitted && [tmpReplacementString fjf_isSpecialLetter]) {
         inputText =  _previousText;
-//        inputText = [NSString fjf_textInputFilterEmoji:inputText];
     }
     
     return inputText;
