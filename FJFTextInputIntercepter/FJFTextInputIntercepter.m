@@ -67,6 +67,7 @@
 @property (nonatomic, strong) NSString *previousText;
 @end
 
+
 //FJFTextInputIntercepter
 @implementation FJFTextInputIntercepter
 
