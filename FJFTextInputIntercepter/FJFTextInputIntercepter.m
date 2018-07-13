@@ -103,6 +103,8 @@
     return tmpInputIntercepter;
     
 }
+
+
 + (void)textInputView:(UIView *)textInputView setInputIntercepter:(FJFTextInputIntercepter *)intercepter {
     
     if ([textInputView isKindOfClass:[UITextField class]]) {
@@ -163,7 +165,6 @@
     NSString *finalText = [self finalTextAfterProcessingWithInput:inputText
                                                   maxCharacterNum:self.maxCharacterNum
                                                   primaryLanguage:primaryLanguage
-                                                    selectedRange:selectedRange
                                                      textPosition:textPosition
                                   isDoubleBytePerChineseCharacter:self.isDoubleBytePerChineseCharacter];
     if (finalText.length > 0) {
@@ -192,7 +193,6 @@
     NSString *finalText = [self finalTextAfterProcessingWithInput:inputText
                                                   maxCharacterNum:self.maxCharacterNum
                                                   primaryLanguage:primaryLanguage
-                                                    selectedRange:selectedRange
                                                      textPosition:textPosition
                                   isDoubleBytePerChineseCharacter:self.isDoubleBytePerChineseCharacter];
     
@@ -207,7 +207,6 @@
 - (NSString *)finalTextAfterProcessingWithInput:(NSString *)inputText
                                 maxCharacterNum:(NSUInteger)maxCharacterNum
                                 primaryLanguage:(NSString *)primaryLanguage
-                                  selectedRange:(UITextRange *)selectedRange
                                    textPosition:(UITextPosition *)textPosition
                 isDoubleBytePerChineseCharacter:(BOOL)isDoubleBytePerChineseCharacter {
     
