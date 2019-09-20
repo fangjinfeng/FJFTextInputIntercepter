@@ -35,21 +35,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    FJFTextView *tmpTextView = [[FJFTextView alloc] initWithFrame:CGRectMake(10, 80, 300, 60)];
-    tmpTextView.backgroundColor = [UIColor redColor];
-    tmpTextView.placeholder = @"chafhlfhdla";
-    FJFTextInputIntercepter *intercepter = [[FJFTextInputIntercepter alloc] init];
-    intercepter.maxCharacterNum = 10;
-    intercepter.emojiAdmitted = NO;
-    intercepter.doubleBytePerChineseCharacter = NO;
-    intercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
-        NSLog(@"最多只能输入汉字5个字，英文10个字母");
-    };
-    [intercepter textInputView:tmpTextView];
-    [self.view addSubview:tmpTextView];
 
-//    [self setupViewControls];
+    [self setupViewControls];
 }
 
 
