@@ -173,9 +173,18 @@
     else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly ||
             self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal ||
             self.isEmojiAdmitted == NO){
-        textField.text = inputText;
+        if (!textPosition) {
+            textField.text = inputText;
+        }
     }
-     _previousText = textField.text;
+    
+    if (!textPosition) {
+        _previousText = textField.text;
+    }
+    
+    if (self.inputBlock) {
+        self.inputBlock(self, textField.text);
+    }
 }
 
 - (void)textViewTextDidChangeWithNotification:(NSNotification *)noti {
@@ -202,10 +211,18 @@
     else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly ||
             self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal ||
             self.isEmojiAdmitted == NO){
-        textView.text = inputText;
+        if (!textPosition) {
+            textView.text = inputText;
+        }
+    }
+    
+    if (!textPosition) {
+         _previousText = textView.text;
     }
 
-    _previousText = textView.text;
+    if (self.inputBlock) {
+        self.inputBlock(self, textView.text);
+    }
 }
 
 // 核心代码
@@ -219,16 +236,8 @@
    
 
     NSString *finalText = nil;
-    if ([primaryLanguage isEqualToString:@"zh-Hans"] ||
-        [primaryLanguage isEqualToString:@"zh-Hant"]) { // 简繁体中文输入
-        // 没有高亮选择的字，则对已输入的文字进行字数统计和限制
-        if (!textPosition) {
-            finalText = [self processingTextWithInput:inputText
-                                      maxCharacterNum:maxCharacterNum
-                      isDoubleBytePerChineseCharacter:isDoubleBytePerChineseCharacter];
-        }
-        
-    } else { // 中文输入法以外的直接对其统计限制即可，不考虑其他语种情况
+    // 没有高亮选择的字，则对已输入的文字进行字数统计和限制
+    if (!textPosition) {
         finalText = [self processingTextWithInput:inputText
                                   maxCharacterNum:maxCharacterNum
                   isDoubleBytePerChineseCharacter:isDoubleBytePerChineseCharacter];

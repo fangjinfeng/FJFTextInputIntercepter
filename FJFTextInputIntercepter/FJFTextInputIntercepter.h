@@ -31,8 +31,12 @@ typedef NS_ENUM(NSUInteger, FJFTextInputIntercepterNumberType) {
 // (当intercepterNumberType 为FJFTextInputIntercepterNumberTypeDecimal 有用)
 @property (nonatomic, assign) NSUInteger decimalPlaces;
 
+// inputBlock 输入 回调处理
+@property (nonatomic, copy) FJFTextInputIntercepterBlock inputBlock;
+
 // beyoudLimitBlock 超过限制 最大 字符数 回调
 @property (nonatomic, copy) FJFTextInputIntercepterBlock beyoudLimitBlock;
+
 
 // emojiAdmitted 是否 允许 输入 表情
 @property (nonatomic, assign, getter=isEmojiAdmitted)   BOOL emojiAdmitted;
