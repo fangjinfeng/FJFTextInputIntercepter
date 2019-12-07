@@ -16,7 +16,7 @@
 #import "FJFTextView.h"
 #import "FJFKeyboardHelper.h"
 
-@interface ViewController ()<UITextViewDelegate>
+@interface ViewController ()
 
 // nameTextFieldView
 @property (nonatomic, strong) FJTextFieldView *nameTextFieldView;
@@ -40,11 +40,6 @@
     [super viewDidLoad];
     
     [self setupViewControls];
-}
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-     NSLog(@"----------%@", textView.textInputMode.primaryLanguage);
-    return YES;
 }
 
 
@@ -159,7 +154,6 @@
 - (FJFTextView *)introductionTextView {
     if (!_introductionTextView) {
         _introductionTextView = [[FJFTextView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(self.passwordTextFieldView.frame) + 20, [UIScreen mainScreen].bounds.size.width - 40, 120)];
-        _introductionTextView.delegate = self;
         _introductionTextView.placeholder = @"请输入100字以内的个人简介";
         _introductionTextView.font = [UIFont systemFontOfSize:14.0f];;
         _introductionTextView.textColor = [UIColor colorWithRed:30/255.0f green:30/255.0f blue:30/255.0f alpha:1.0f];;
