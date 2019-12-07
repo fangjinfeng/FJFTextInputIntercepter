@@ -18,6 +18,10 @@
 		3063CBC620ECC240009B75B1 /* NSString+FJFTextInputStringType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBBF20ECC240009B75B1 /* NSString+FJFTextInputStringType.m */; };
 		3063CBC920ECC240009B75B1 /* FJFTextInputIntercepter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBC520ECC240009B75B1 /* FJFTextInputIntercepter.m */; };
 		3063CBCC20EE16F2009B75B1 /* FJTextFieldView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3063CBCB20EE16F2009B75B1 /* FJTextFieldView.m */; };
+		64060C72239BF5DB00289376 /* UIResponder+FJFKeyboardFirstResponder.m in Sources */ = {isa = PBXBuildFile; fileRef = 64060C6C239BF5DB00289376 /* UIResponder+FJFKeyboardFirstResponder.m */; };
+		64060C73239BF5DB00289376 /* UIViewController+FJFKeyboardCurrentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64060C6E239BF5DB00289376 /* UIViewController+FJFKeyboardCurrentViewController.m */; };
+		64060C74239BF5DB00289376 /* FJFKeyboardHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 64060C6F239BF5DB00289376 /* FJFKeyboardHelper.m */; };
+		64060C75239BF5DB00289376 /* UIView+FJFKeyboardHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 64060C70239BF5DB00289376 /* UIView+FJFKeyboardHelper.m */; };
 		64FE5F38227EC9D200C9552C /* FJFTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 64FE5F37227EC9D200C9552C /* FJFTextView.m */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +65,14 @@
 		3063CBC520ECC240009B75B1 /* FJFTextInputIntercepter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FJFTextInputIntercepter.m; sourceTree = "<group>"; };
 		3063CBCA20EE16F2009B75B1 /* FJTextFieldView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FJTextFieldView.h; sourceTree = "<group>"; };
 		3063CBCB20EE16F2009B75B1 /* FJTextFieldView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FJTextFieldView.m; sourceTree = "<group>"; };
+		64060C6A239BF5DB00289376 /* UIViewController+FJFKeyboardCurrentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+FJFKeyboardCurrentViewController.h"; sourceTree = "<group>"; };
+		64060C6B239BF5DB00289376 /* FJFKeyboardHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FJFKeyboardHelper.h; sourceTree = "<group>"; };
+		64060C6C239BF5DB00289376 /* UIResponder+FJFKeyboardFirstResponder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+FJFKeyboardFirstResponder.m"; sourceTree = "<group>"; };
+		64060C6D239BF5DB00289376 /* UIView+FJFKeyboardHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FJFKeyboardHelper.h"; sourceTree = "<group>"; };
+		64060C6E239BF5DB00289376 /* UIViewController+FJFKeyboardCurrentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+FJFKeyboardCurrentViewController.m"; sourceTree = "<group>"; };
+		64060C6F239BF5DB00289376 /* FJFKeyboardHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FJFKeyboardHelper.m; sourceTree = "<group>"; };
+		64060C70239BF5DB00289376 /* UIView+FJFKeyboardHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+FJFKeyboardHelper.m"; sourceTree = "<group>"; };
+		64060C71239BF5DB00289376 /* UIResponder+FJFKeyboardFirstResponder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+FJFKeyboardFirstResponder.h"; sourceTree = "<group>"; };
 		64FE5F36227EC9D200C9552C /* FJFTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FJFTextView.h; sourceTree = "<group>"; };
 		64FE5F37227EC9D200C9552C /* FJFTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FJFTextView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,6 +105,7 @@
 		3063CB7F20ECC22D009B75B1 = {
 			isa = PBXGroup;
 			children = (
+				64060C69239BF5DB00289376 /* FJFKeyboardHelper */,
 				64FE5F35227EC9D200C9552C /* FJFTextView */,
 				3063CBBD20ECC240009B75B1 /* FJFTextInputIntercepter */,
 				3063CB8A20ECC22D009B75B1 /* FJTextInputIntercepterDemo */,
@@ -151,12 +164,27 @@
 		3063CBBD20ECC240009B75B1 /* FJFTextInputIntercepter */ = {
 			isa = PBXGroup;
 			children = (
-				3063CBBE20ECC240009B75B1 /* NSString+FJFTextInputStringType.h */,
-				3063CBBF20ECC240009B75B1 /* NSString+FJFTextInputStringType.m */,
 				3063CBC420ECC240009B75B1 /* FJFTextInputIntercepter.h */,
 				3063CBC520ECC240009B75B1 /* FJFTextInputIntercepter.m */,
+				3063CBBE20ECC240009B75B1 /* NSString+FJFTextInputStringType.h */,
+				3063CBBF20ECC240009B75B1 /* NSString+FJFTextInputStringType.m */,
 			);
 			path = FJFTextInputIntercepter;
+			sourceTree = "<group>";
+		};
+		64060C69239BF5DB00289376 /* FJFKeyboardHelper */ = {
+			isa = PBXGroup;
+			children = (
+				64060C6B239BF5DB00289376 /* FJFKeyboardHelper.h */,
+				64060C6F239BF5DB00289376 /* FJFKeyboardHelper.m */,
+				64060C6A239BF5DB00289376 /* UIViewController+FJFKeyboardCurrentViewController.h */,
+				64060C6E239BF5DB00289376 /* UIViewController+FJFKeyboardCurrentViewController.m */,
+				64060C6D239BF5DB00289376 /* UIView+FJFKeyboardHelper.h */,
+				64060C70239BF5DB00289376 /* UIView+FJFKeyboardHelper.m */,
+				64060C71239BF5DB00289376 /* UIResponder+FJFKeyboardFirstResponder.h */,
+				64060C6C239BF5DB00289376 /* UIResponder+FJFKeyboardFirstResponder.m */,
+			);
+			path = FJFKeyboardHelper;
 			sourceTree = "<group>";
 		};
 		64FE5F35227EC9D200C9552C /* FJFTextView */ = {
@@ -299,11 +327,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				3063CB9020ECC22D009B75B1 /* ViewController.m in Sources */,
+				64060C74239BF5DB00289376 /* FJFKeyboardHelper.m in Sources */,
+				64060C75239BF5DB00289376 /* UIView+FJFKeyboardHelper.m in Sources */,
 				3063CBCC20EE16F2009B75B1 /* FJTextFieldView.m in Sources */,
 				3063CB9B20ECC22E009B75B1 /* main.m in Sources */,
 				64FE5F38227EC9D200C9552C /* FJFTextView.m in Sources */,
 				3063CBC620ECC240009B75B1 /* NSString+FJFTextInputStringType.m in Sources */,
 				3063CBC920ECC240009B75B1 /* FJFTextInputIntercepter.m in Sources */,
+				64060C73239BF5DB00289376 /* UIViewController+FJFKeyboardCurrentViewController.m in Sources */,
+				64060C72239BF5DB00289376 /* UIResponder+FJFKeyboardFirstResponder.m in Sources */,
 				3063CB8D20ECC22D009B75B1 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

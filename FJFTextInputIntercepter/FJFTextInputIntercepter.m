@@ -155,12 +155,13 @@
     UITextField *textField = (UITextField *)noti.object;
     NSString *inputText = textField.text;
     NSString *primaryLanguage = [textField.textInputMode primaryLanguage];
+    
     //获取高亮部分
     UITextRange *selectedRange = [textField markedTextRange];
     UITextPosition *textPosition = [textField positionFromPosition:selectedRange.start
                                                             offset:0];
     
-    inputText = [self handleWithInputText:inputText];
+    inputText = [self handleWithInputText:inputText primaryLanguage:primaryLanguage];
 
     NSString *finalText = [self finalTextAfterProcessingWithInput:inputText
                                                   maxCharacterNum:self.maxCharacterNum
@@ -197,7 +198,7 @@
     UITextPosition *textPosition = [textView positionFromPosition:selectedRange.start
                                                            offset:0];
     
-    inputText = [self handleWithInputText:inputText];
+    inputText = [self handleWithInputText:inputText primaryLanguage:primaryLanguage];
     
     NSString *finalText = [self finalTextAfterProcessingWithInput:inputText
                                                   maxCharacterNum:self.maxCharacterNum
@@ -320,7 +321,7 @@
 
 
 // 处理 输入 字符串
-- (NSString *)handleWithInputText:(NSString *)inputText {
+- (NSString *)handleWithInputText:(NSString *)inputText primaryLanguage:(NSString *)primaryLanguage {
     if (_previousText.length >= inputText.length) {
         return inputText;
     }
@@ -328,7 +329,7 @@
     NSString *tmpReplacementString = [inputText substringWithRange:NSMakeRange(_previousText.length, (inputText.length - _previousText.length))];
     // 只允许 输入 数字
     if (self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly) {
-        if ([tmpReplacementString fjf_isCertainStringType:FJFTextInputStringTypeNumber] == NO) {
+        if ([tmpReplacementString fjf_isContainStringType:FJFTextInputStringTypeNumber] == NO) {
             inputText = _previousText;
         }
     }
@@ -346,13 +347,26 @@
         }
     }
     // 不允许 输入 表情
-    else if (!self.isEmojiAdmitted && [tmpReplacementString fjf_isSpecialLetter]) {
+    else if (!self.isEmojiAdmitted && [self isContainEmojiWithReplacementString:tmpReplacementString primaryLanguage:primaryLanguage]) {
         inputText =  _previousText;
     }
     
     return inputText;
 }
 
+
+// 是否 包含 表情
+- (BOOL)isContainEmojiWithReplacementString:(NSString *)replacementString
+                            primaryLanguage:(NSString *)primaryLanguage {
+    if ([replacementString fjf_isContainEmoji]) {
+        return YES;
+    }
+    if ([primaryLanguage isEqualToString:@"emoji"] ||
+        primaryLanguage.length == 0) {
+        return YES;
+    }
+    return NO;
+}
 
 - (BOOL)inputText:(NSString *)inputText shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     //    限制只能输入数字

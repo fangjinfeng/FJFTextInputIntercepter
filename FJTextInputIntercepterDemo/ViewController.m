@@ -12,10 +12,11 @@
 #import "FJTextFieldView.h"
 // vc
 #import "ViewController.h"
-
+// tool
 #import "FJFTextView.h"
+#import "FJFKeyboardHelper.h"
 
-@interface ViewController ()
+@interface ViewController ()<UITextViewDelegate>
 
 // nameTextFieldView
 @property (nonatomic, strong) FJTextFieldView *nameTextFieldView;
@@ -27,6 +28,8 @@
 @property (nonatomic, strong) FJTextFieldView *accountTextFieldView;
 // passwordTextField
 @property (nonatomic, strong) FJTextFieldView *passwordTextFieldView;
+// introductionTextView
+@property (nonatomic, strong) FJFTextView *introductionTextView;
 @end
 
 @implementation ViewController
@@ -35,8 +38,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [self setupViewControls];
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+     NSLog(@"----------%@", textView.textInputMode.primaryLanguage);
+    return YES;
 }
 
 
@@ -47,6 +55,8 @@
     [self.view addSubview:self.moneyTextFieldView];
     [self.view addSubview:self.accountTextFieldView];
     [self.view addSubview:self.passwordTextFieldView];
+    [self.view addSubview:self.introductionTextView];
+    [FJFKeyboardHelper handleKeyboardWithContainerView:self.view];
 }
 
 
@@ -61,7 +71,7 @@
         FJFTextInputIntercepter *intercepter = [[FJFTextInputIntercepter alloc] init];
         intercepter.maxCharacterNum = 10;
         intercepter.emojiAdmitted = NO;
-        intercepter.doubleBytePerChineseCharacter = NO;
+        intercepter.doubleBytePerChineseCharacter = YES;
         intercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
             NSLog(@"最多只能输入汉字5个字，英文10个字母");
         };
@@ -143,5 +153,28 @@
        [FJFTextInputIntercepter textInputView:_passwordTextFieldView.textField setInputIntercepter:intercepter];
     }
     return  _passwordTextFieldView;
+}
+
+// introductionTextView 个人简介
+- (FJFTextView *)introductionTextView {
+    if (!_introductionTextView) {
+        _introductionTextView = [[FJFTextView alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(self.passwordTextFieldView.frame) + 20, [UIScreen mainScreen].bounds.size.width - 40, 120)];
+        _introductionTextView.delegate = self;
+        _introductionTextView.placeholder = @"请输入100字以内的个人简介";
+        _introductionTextView.font = [UIFont systemFontOfSize:14.0f];;
+        _introductionTextView.textColor = [UIColor colorWithRed:30/255.0f green:30/255.0f blue:30/255.0f alpha:1.0f];;
+        _introductionTextView.tintColor = [UIColor colorWithRed:255/255.0f green:107/255.0f blue:0/255.0f alpha:1.0f];;
+        _introductionTextView.textContainer.lineFragmentPadding = 0.0;
+        FJFTextInputIntercepter *textInputIntercepter = [[FJFTextInputIntercepter alloc] init];
+        textInputIntercepter.maxCharacterNum = 100;
+        textInputIntercepter.emojiAdmitted = NO;
+        textInputIntercepter.doubleBytePerChineseCharacter = YES;
+        textInputIntercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
+            NSLog(@"中文50个字符，英文或字母100个字符");
+        };
+        [textInputIntercepter textInputView:_introductionTextView];
+    }
+
+    return _introductionTextView;
 }
 @end
