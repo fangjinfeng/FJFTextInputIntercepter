@@ -22,7 +22,7 @@ typedef NS_ENUM(NSUInteger, FJFTextInputIntercepterNumberType) {
 };
 
 
-@interface FJFTextInputIntercepter : NSObject <UITextFieldDelegate, UITextViewDelegate>
+@interface FJFTextInputIntercepter : NSObject
 
 // maxCharacterNum 限制 最大 字符
 @property (nonatomic, assign) NSUInteger maxCharacterNum;
@@ -63,6 +63,10 @@ typedef NS_ENUM(NSUInteger, FJFTextInputIntercepterNumberType) {
  */
 - (void)textInputView:(UIView *)textInputView;
 
+
+/// 更新 字符串
+/// @param previousText 字符串
+- (void)updatePreviousText:(NSString *)previousText;
 
 /**
  设置 拦截器和拦截的输入框

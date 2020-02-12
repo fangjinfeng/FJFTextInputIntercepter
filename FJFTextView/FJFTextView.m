@@ -46,6 +46,7 @@
 // 清除提示语
 - (void)clearPlaceHoder {
     self.placeholder = @"";
+    [self textDidChange];
 }
 
 #pragma mark -------------------------- Noti Methods

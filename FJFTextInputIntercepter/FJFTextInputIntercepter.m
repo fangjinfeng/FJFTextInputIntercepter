@@ -62,7 +62,7 @@
 @end
 
 
-@interface FJFTextInputIntercepter()<UITextViewDelegate, UITextFieldDelegate>
+@interface FJFTextInputIntercepter()
 // previousText
 @property (nonatomic, strong) NSString *previousText;
 @end
@@ -91,6 +91,11 @@
 
 #pragma mark -------------------------- Public  Methods
 
+- (void)updatePreviousText:(NSString *)previousText {
+    _previousText = previousText;
+    
+}
+
 - (void)textInputView:(UIView *)textInputView {
     [FJFTextInputIntercepter textInputView:textInputView setInputIntercepter:self];
 }
@@ -109,7 +114,7 @@
     
     if ([textInputView isKindOfClass:[UITextField class]]) {
         UITextField *textField = (UITextField *)textInputView;
-       
+
         textField.yb_textInputIntercepter = intercepter;
         [[NSNotificationCenter defaultCenter] addObserver:intercepter
                                                  selector:@selector(textInputDidChangeWithNotification:)
@@ -152,8 +157,17 @@
 
 - (void)textFieldTextDidChangeWithNotification:(NSNotification *)noti {
     
+    
     UITextField *textField = (UITextField *)noti.object;
     NSString *inputText = textField.text;
+    
+    if (inputText.length < _previousText.length) {
+        if (self.inputBlock) {
+            self.inputBlock(self, textField.text);
+        }
+        return;
+    }
+    
     NSString *primaryLanguage = [textField.textInputMode primaryLanguage];
     
     //获取高亮部分
@@ -192,6 +206,14 @@
     
     UITextView *textView = (UITextView *)noti.object;
     NSString *inputText = textView.text;
+    
+    if (inputText.length < _previousText.length) {
+        if (self.inputBlock) {
+            self.inputBlock(self, textView.text);
+        }
+        return;
+    }
+    
     NSString *primaryLanguage = [textView.textInputMode primaryLanguage];
     //获取高亮部分
     UITextRange *selectedRange = [textView markedTextRange];
@@ -316,8 +338,6 @@
    
     return nil;
 }
-
-
 
 
 // 处理 输入 字符串
