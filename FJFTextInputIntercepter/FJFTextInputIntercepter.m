@@ -14,7 +14,6 @@
 
 
 
-
 //UITextField
 
 @interface UITextField (FJFTextInputIntercepter)
@@ -71,7 +70,7 @@
 //FJFTextInputIntercepter
 @implementation FJFTextInputIntercepter
 
-#pragma mark -------------------------- Life  Circle
+#pragma mark - Life  Circle
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -89,19 +88,9 @@
 }
 
 
-#pragma mark -------------------------- Public  Methods
+#pragma mark - Public  Methods
 
-- (void)updatePreviousText:(NSString *)previousText {
-    _previousText = previousText;
-    
-}
-
-- (void)textInputView:(UIView *)textInputView {
-    [FJFTextInputIntercepter textInputView:textInputView setInputIntercepter:self];
-}
-
-
-+ (FJFTextInputIntercepter *)textInputView:(UIView *)textInputView beyoudLimitBlock:(FJFTextInputIntercepterBlock)beyoudLimitBlock {
++ (FJFTextInputIntercepter *)textInputView:(UIView <UITextInput>*)textInputView beyoudLimitBlock:(FJFTextInputIntercepterBlock)beyoudLimitBlock {
     FJFTextInputIntercepter *tmpInputIntercepter = [[FJFTextInputIntercepter alloc] init];
     tmpInputIntercepter.beyoudLimitBlock = [beyoudLimitBlock copy];
     [self textInputView:textInputView setInputIntercepter:tmpInputIntercepter];
@@ -110,11 +99,28 @@
 }
 
 
-+ (void)textInputView:(UIView *)textInputView setInputIntercepter:(FJFTextInputIntercepter *)intercepter {
-    
+- (void)updateTextWithInputView:(UIView <UITextInput>*)inputView {
+    if ([inputView isKindOfClass:[UITextField class]]) {
+        UITextField *textField = (UITextField *)inputView;
+        _previousText = textField.text;
+        [self updateTextFieldWithTextField:textField];
+        
+    } else if ([inputView isKindOfClass:[UITextView class]]) {
+        UITextView *textView = (UITextView *)inputView;
+        _previousText = textView.text;
+        [self updateTextViewWithTextView:textView];
+    }
+}
+
+
+- (void)textInputView:(UIView <UITextInput>*)textInputView {
+    [FJFTextInputIntercepter textInputView:textInputView setInputIntercepter:self];
+}
+
+
++ (void)textInputView:(UIView <UITextInput>*)textInputView setInputIntercepter:(FJFTextInputIntercepter *)intercepter {
     if ([textInputView isKindOfClass:[UITextField class]]) {
         UITextField *textField = (UITextField *)textInputView;
-
         textField.yb_textInputIntercepter = intercepter;
         [[NSNotificationCenter defaultCenter] addObserver:intercepter
                                                  selector:@selector(textInputDidChangeWithNotification:)
@@ -132,7 +138,107 @@
 }
 
 
-#pragma mark -------------------------- Noti  Methods
+- (void)updateTextViewWithTextView:(UITextView *)textView {
+    NSString *inputText = textView.text;
+    NSString *primaryLanguage = [textView.textInputMode primaryLanguage];
+
+    NSInteger corsorStartPos = [textView offsetFromPosition:textView.beginningOfDocument toPosition:textView.selectedTextRange.start];
+    
+    // 如果 之前 文本 超出 字符限制
+    if ([self isBeyondLimtWithInputText:self.previousText]) {
+        textView.text = [self handleInputTextWithInputText:inputText];
+        self.previousText = textView.text;
+    }
+    
+    
+    // 如果 当前字符串 小于 之前字符串(可能删除，也可能是特殊...造成)
+    if (inputText.length < self.previousText.length) {
+        if ([self isSpecialDotWithInputText:inputText previousText:self.previousText]) {
+            NSInteger replaceTextLength =  self.previousText.length - inputText.length;
+            textView.text = self.previousText;
+            [FJFTextInputIntercepter cursorLocation:textView index:corsorStartPos + replaceTextLength];
+        }
+    }
+    // 不允许 输入
+    else if ([self isAllowedInputWithInputText:inputText previousText:self.previousText primaryLanguage:primaryLanguage] == false) {
+        NSInteger replaceTextLength = inputText.length - self.previousText.length;
+        textView.text = self.previousText;
+        [FJFTextInputIntercepter cursorLocation:textView index:corsorStartPos - replaceTextLength];
+    }
+
+    
+    self.previousText = textView.text;
+    
+    if (self.inputBlock) {
+        self.inputBlock(self, textView.text);
+    }
+}
+
+
+// 释放 是特殊的点点符号
+- (BOOL)isSpecialDotWithInputText:(NSString *)inputText
+                     previousText:(NSString *)previousText {
+    // 如果 当前字符串 小于 之前输入字符串
+    if (inputText.length < previousText.length) {
+        NSString *replaceText = [self differentTextWithInputText:previousText previousText:inputText];
+        if (replaceText.length > 1) {
+            if (self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal ||
+                self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly) {
+                if ([inputText containsString:@"…"]) {
+                    return true;
+                }
+            } else {
+                __block BOOL isSpecialDot = true;
+                [replaceText enumerateSubstringsInRange:NSMakeRange(0, replaceText.length) options:NSStringEnumerationByComposedCharacterSequences usingBlock:^(NSString * _Nullable substring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) {
+                    if ([substring isEqualToString:@"."] == false) {
+                        isSpecialDot = false;
+                        *stop = true;
+                    }
+                }];
+                return isSpecialDot;
+            }
+        }
+    }
+    return false;
+}
+
+
+// 更新 textField
+- (void)updateTextFieldWithTextField:(UITextField *)textField {
+    NSString *inputText = textField.text;
+
+    NSInteger corsorStartPos = [textField offsetFromPosition:textField.beginningOfDocument toPosition:textField.selectedTextRange.start];
+    NSString *primaryLanguage = [textField.textInputMode primaryLanguage];
+
+    // 如果 之前 文本 超出 字符限制
+    if ([self isBeyondLimtWithInputText:self.previousText]) {
+        textField.text = [self handleInputTextWithInputText:inputText];
+        self.previousText = textField.text;
+    }
+    
+    // 如果 当前字符串 小于 之前字符串(可能删除，也可能是特殊...造成)
+    if (inputText.length < self.previousText.length) {
+        if ([self isSpecialDotWithInputText:inputText previousText:self.previousText]) {
+            NSInteger replaceTextLength =  self.previousText.length - inputText.length;
+            textField.text = self.previousText;
+            [FJFTextInputIntercepter cursorLocation:textField index:corsorStartPos + replaceTextLength];
+        }
+    }
+    // 不允许 输入
+    else if ([self isAllowedInputWithInputText:inputText previousText:self.previousText primaryLanguage:primaryLanguage] == false) {
+        NSInteger replaceTextLength = inputText.length - self.previousText.length;
+        textField.text = self.previousText;
+        [FJFTextInputIntercepter cursorLocation:textField index:corsorStartPos - replaceTextLength];
+    }
+    
+    self.previousText = textField.text;
+
+    if (self.inputBlock) {
+        self.inputBlock(self, textField.text);
+    }
+}
+
+#pragma mark - Noti  Methods
 - (void)textInputDidChangeWithNotification:(NSNotification *)noti {
     if (![((UIView *)noti.object) isFirstResponder]) {
         return;
@@ -153,232 +259,240 @@
     }
 }
 
-#pragma mark -------------------------- Private  Methods
+#pragma mark - Private  Methods
 
 - (void)textFieldTextDidChangeWithNotification:(NSNotification *)noti {
-    
-    
     UITextField *textField = (UITextField *)noti.object;
-    NSString *inputText = textField.text;
-    
-    if (inputText.length < _previousText.length) {
-        if (self.inputBlock) {
-            self.inputBlock(self, textField.text);
-        }
-        return;
-    }
-    
-    NSString *primaryLanguage = [textField.textInputMode primaryLanguage];
-    
-    //获取高亮部分
-    UITextRange *selectedRange = [textField markedTextRange];
-    UITextPosition *textPosition = [textField positionFromPosition:selectedRange.start
-                                                            offset:0];
-    
-    inputText = [self handleWithInputText:inputText primaryLanguage:primaryLanguage];
-
-    NSString *finalText = [self finalTextAfterProcessingWithInput:inputText
-                                                  maxCharacterNum:self.maxCharacterNum
-                                                  primaryLanguage:primaryLanguage
-                                                     textPosition:textPosition
-                                  isDoubleBytePerChineseCharacter:self.isDoubleBytePerChineseCharacter];
-    if (finalText.length > 0) {
-        textField.text = finalText;
-    }
-    else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly ||
-            self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal ||
-            self.isEmojiAdmitted == NO){
-        if (!textPosition) {
-            textField.text = inputText;
-        }
-    }
-    
-    if (!textPosition) {
-        _previousText = textField.text;
-    }
-    
-    if (self.inputBlock) {
-        self.inputBlock(self, textField.text);
-    }
+    [self updateTextFieldWithTextField:textField];
 }
+
+
 
 - (void)textViewTextDidChangeWithNotification:(NSNotification *)noti {
-    
     UITextView *textView = (UITextView *)noti.object;
-    NSString *inputText = textView.text;
-    
-    if (inputText.length < _previousText.length) {
-        if (self.inputBlock) {
-            self.inputBlock(self, textView.text);
-        }
-        return;
-    }
-    
-    NSString *primaryLanguage = [textView.textInputMode primaryLanguage];
-    //获取高亮部分
-    UITextRange *selectedRange = [textView markedTextRange];
-    UITextPosition *textPosition = [textView positionFromPosition:selectedRange.start
-                                                           offset:0];
-    
-    inputText = [self handleWithInputText:inputText primaryLanguage:primaryLanguage];
-    
-    NSString *finalText = [self finalTextAfterProcessingWithInput:inputText
-                                                  maxCharacterNum:self.maxCharacterNum
-                                                  primaryLanguage:primaryLanguage
-                                                     textPosition:textPosition
-                                  isDoubleBytePerChineseCharacter:self.isDoubleBytePerChineseCharacter];
-    
-    if (finalText.length > 0) {
-        textView.text = finalText;
-    }
-    else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly ||
-            self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal ||
-            self.isEmojiAdmitted == NO){
-        if (!textPosition) {
-            textView.text = inputText;
-        }
-    }
-    
-    if (!textPosition) {
-         _previousText = textView.text;
-    }
-
-    if (self.inputBlock) {
-        self.inputBlock(self, textView.text);
-    }
+    [self updateTextViewWithTextView:textView];
 }
 
-// 核心代码
-// 对简体 中文 输入
-- (NSString *)finalTextAfterProcessingWithInput:(NSString *)inputText
-                                maxCharacterNum:(NSUInteger)maxCharacterNum
-                                primaryLanguage:(NSString *)primaryLanguage
-                                   textPosition:(UITextPosition *)textPosition
-                isDoubleBytePerChineseCharacter:(BOOL)isDoubleBytePerChineseCharacter {
-    
-   
 
-    NSString *finalText = nil;
-    // 没有高亮选择的字，则对已输入的文字进行字数统计和限制
-    if (!textPosition) {
-        finalText = [self processingTextWithInput:inputText
-                                  maxCharacterNum:maxCharacterNum
-                  isDoubleBytePerChineseCharacter:isDoubleBytePerChineseCharacter];
+- (BOOL)isAllowedInputWithInputText:(NSString *)inputText
+                       previousText:(NSString *)previousText
+                    primaryLanguage:(NSString *)primaryLanguage {
+    
+    // 如果是删除 直接返回true
+    if (inputText.length < previousText.length) {
+        return true;
     }
     
-    return finalText;
-}
-
-- (NSString *)processingTextWithInput:(NSString *)inputText
-                      maxCharacterNum:(NSUInteger)maxCharacterNum
-      isDoubleBytePerChineseCharacter:(BOOL)isDoubleBytePerChineseCharacter {
-    
-    NSString *processingText = nil;
-    
-    if (isDoubleBytePerChineseCharacter) { //如果一个汉字是双字节
-        processingText = [self doubleBytePerChineseCharacterSubString:inputText
-                                                      maxCharacterNum:maxCharacterNum];
-    } else {
-        if (inputText.length > maxCharacterNum) {
-            NSRange rangeIndex = [inputText rangeOfComposedCharacterSequenceAtIndex:maxCharacterNum];
-            if (rangeIndex.length == 1) {
-                processingText = [inputText substringToIndex:maxCharacterNum];
-            } else {
-                NSRange rangeRange = [inputText rangeOfComposedCharacterSequencesForRange:NSMakeRange(0, maxCharacterNum)];
-                processingText = [inputText substringWithRange:rangeRange];
-            }
-            if (self.beyoudLimitBlock) {
-                self.beyoudLimitBlock(self, processingText);
-            }
-        }
+    NSString *replaceText = [self differentTextWithInputText:inputText previousText:self.previousText];
+    if ([self isAllowedInputWithReplaceText:replaceText previousText:previousText primaryLanguage:primaryLanguage] == false) {
+        return false;
     }
-    return processingText;
+    
+    if ([self isBeyondLimtWithInputText:inputText]) {
+        return false;
+    }
+    return true;
 }
 
-- (NSString *)doubleBytePerChineseCharacterSubString:(NSString*)string
-                                     maxCharacterNum:(NSUInteger)maxCharacterNum {
-    // 允许 表情
+
+// 处理字符串
+- (NSString *)handleInputTextWithInputText:(NSString *)inputText {
+    // 允许 输入 表情 (UTF8编码 英文一个字节 汉字三个字节 表情4-6个字节
     if (self.emojiAdmitted) {
         // 调用 UTF8 编码处理 一个字符一个字节 一个汉字3个字节 一个表情4个字节
-        NSUInteger textBytesLength = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-        if (textBytesLength > maxCharacterNum) {
+        NSUInteger textBytesLength = [inputText lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+        if (textBytesLength > self.maxCharacterNum) {
             NSRange range;
             NSUInteger byteLength = 0;
-            NSString *text = string;
-            for(int i=0; i < string.length && byteLength <= maxCharacterNum; i += range.length) {
-                range = [string rangeOfComposedCharacterSequenceAtIndex:i];
+            NSString *text = inputText;
+            for(int i = 0; i < inputText.length && byteLength <= self.maxCharacterNum; i += range.length) {
+                range = [inputText rangeOfComposedCharacterSequenceAtIndex:i];
                 byteLength += strlen([[text substringWithRange:range] UTF8String]);
-                if (byteLength > maxCharacterNum) {
+                if (byteLength > self.maxCharacterNum) {
                     NSString* newText = [text substringWithRange:NSMakeRange(0, range.location)];
-                    string = newText;
+                    inputText = newText;
                 }
             }
-            return string;
+            return inputText;
         }
     }
-    // 不允许 输入 表情
-    else {
+    // 汉字两个字节(kCFStringEncodingGB_18030_2000)编码
+    else if(self.isDoubleBytePerChineseCharacter) {
         // 一个字符一个字节 一个汉字2个字节
         NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-        NSData *data = [string dataUsingEncoding:encoding];
+        NSData *data = [inputText dataUsingEncoding:encoding];
         NSInteger length = [data length];
-        if (length > maxCharacterNum) {
-            NSData *subdata = [data subdataWithRange:NSMakeRange(0, maxCharacterNum)];
+        if (length > self.maxCharacterNum) {
+            NSData *subdata = [data subdataWithRange:NSMakeRange(0, self.maxCharacterNum)];
             NSString *content = [[NSString alloc] initWithData:subdata encoding:encoding];//注意：当截取CharacterCount长度字符时把中文字符截断返回的content会是nil
             if (!content || content.length == 0) {
-                subdata = [data subdataWithRange:NSMakeRange(0, maxCharacterNum - 1)];
+                subdata = [data subdataWithRange:NSMakeRange(0, self.maxCharacterNum - 1)];
                 content =  [[NSString alloc] initWithData:subdata encoding:encoding];
-            }
-            if (self.beyoudLimitBlock) {
-                self.beyoudLimitBlock(self, content);
             }
             return content;
         }
     }
-   
-    return nil;
+    else {
+        // 正常 字符 比较
+        if (inputText.length > self.maxCharacterNum) {
+            NSRange rangeIndex = [inputText rangeOfComposedCharacterSequenceAtIndex:self.maxCharacterNum];
+            if (rangeIndex.length == 1) {
+                inputText = [inputText substringToIndex:self.maxCharacterNum];
+            } else {
+                NSRange rangeRange = [inputText rangeOfComposedCharacterSequencesForRange:NSMakeRange(0, self.maxCharacterNum)];
+                inputText = [inputText substringWithRange:rangeRange];
+            }
+            return inputText;
+        }
+    }
+    return inputText;
+}
+
+// 释放 超出 字符 限制
+- (BOOL)isBeyondLimtWithInputText:(NSString *)inputText {
+    // 允许 输入 表情 (UTF8编码 英文一个字节 汉字三个字节 表情4-6个字节
+    if (self.emojiAdmitted) {
+        // 调用 UTF8 编码处理 一个字符一个字节 一个汉字3个字节 一个表情4个字节
+        NSUInteger textBytesLength = [inputText lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+        if (textBytesLength > self.maxCharacterNum) {
+            return true;
+        }
+    }
+    // 汉字两个字节(kCFStringEncodingGB_18030_2000)编码
+    else if(self.isDoubleBytePerChineseCharacter) {
+        // 一个字符一个字节 一个汉字2个字节
+        NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+        NSData *data = [inputText dataUsingEncoding:encoding];
+        NSInteger length = [data length];
+        if (length > self.maxCharacterNum) {
+            return true;
+        }
+    }
+    else {
+        // 正常 字符 比较
+        if (inputText.length > self.maxCharacterNum) {
+            return true;
+        }
+    }
+    return false;
 }
 
 
-// 处理 输入 字符串
-- (NSString *)handleWithInputText:(NSString *)inputText primaryLanguage:(NSString *)primaryLanguage {
-    if (_previousText.length >= inputText.length) {
-        return inputText;
+
+// 是否 允许 输入
+- (BOOL)isAllowedInputWithReplaceText:(NSString *)replaceText
+                         previousText:(NSString *)previousText
+                       primaryLanguage:(NSString *)primaryLanguage {
+    
+    if (!replaceText.length) {
+        return true;
     }
     
-    NSString *tmpReplacementString = [inputText substringWithRange:NSMakeRange(_previousText.length, (inputText.length - _previousText.length))];
     // 只允许 输入 数字
     if (self.intercepterNumberType == FJFTextInputIntercepterNumberTypeNumberOnly) {
-        if ([tmpReplacementString fjf_isContainStringType:FJFTextInputStringTypeNumber] == NO) {
-            inputText = _previousText;
-        }
+        return [replaceText fjf_isContainStringType:FJFTextInputStringTypeNumber];
     }
     // 输入 小数
     else if(self.intercepterNumberType == FJFTextInputIntercepterNumberTypeDecimal){
-        NSRange tmpRange = NSMakeRange(_previousText.length, 0);
-        BOOL isCorrect = [self inputText:_previousText shouldChangeCharactersInRange:tmpRange replacementString:tmpReplacementString];
-        if (isCorrect == YES) {
-            if (inputText.length == self.maxCharacterNum && [tmpReplacementString isEqualToString:@"."]) {
-                 inputText = _previousText;
-            }
-        }
-        else {
-            inputText = _previousText;
-        }
+        NSRange tmpRange = NSMakeRange(previousText.length, 0);
+        return [self inputText:previousText shouldChangeCharactersInRange:tmpRange replacementString:replaceText];
+
     }
-    // 不允许 输入 表情
-    else if (!self.isEmojiAdmitted && [self isContainEmojiWithReplacementString:tmpReplacementString primaryLanguage:primaryLanguage]) {
-        inputText =  _previousText;
+    // 不允许 输入 表情 并且 不包含表情
+    else if (!self.isEmojiAdmitted) {
+        return ![self isContainEmojiWithReplacementText:replaceText primaryLanguage:primaryLanguage];
+    }
+    return true;
+}
+
+// 新添加的字符
+- (NSString *)differentTextWithInputText:(NSString *)inputText
+                            previousText:(NSString *)previousText {
+
+    // 如果是删除 直接返回true
+    if (inputText.length < previousText.length) {
+        return @"";
     }
     
-    return inputText;
+    NSString *differentText = nil;
+    
+    NSMutableArray <NSValue *> *inputSubMarray = [NSMutableArray array];
+    NSMutableArray <NSValue *> *preSubMarray = [NSMutableArray array];
+
+    [inputText enumerateSubstringsInRange:NSMakeRange(0, inputText.length) options:NSStringEnumerationByComposedCharacterSequences usingBlock:^(NSString * _Nullable substring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) {
+        [inputSubMarray addObject:[NSValue valueWithRange:substringRange]];
+    }];
+    
+    [previousText enumerateSubstringsInRange:NSMakeRange(0, previousText.length) options:NSStringEnumerationByComposedCharacterSequences usingBlock:^(NSString * _Nullable substring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) {
+        [preSubMarray addObject:[NSValue valueWithRange:substringRange]];
+    }];
+    
+    __block NSValue *startValue = nil;
+    [inputSubMarray enumerateObjectsUsingBlock:^(NSValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSRange subTextRange = [obj rangeValue];
+        NSString *subText = [inputText substringWithRange:subTextRange];
+        if (idx < preSubMarray.count) {
+            NSRange preSubTextRange = [preSubMarray[idx] rangeValue];
+            NSString *preSubText =  [previousText substringWithRange:preSubTextRange];
+            if ([subText isEqualToString:preSubText] == false) {
+                startValue = obj;
+                *stop = true;
+            }
+        } else {
+            startValue = obj;
+            *stop = true;
+        }
+    }];
+    
+    NSRange startRange = [startValue rangeValue];
+    if (startRange.location + startRange.length == inputText.length) {
+        differentText = [inputText substringWithRange:startRange];
+    } else {
+        __block NSValue *endValue = nil;
+        NSArray <NSValue *> *inputReverseSubArray = [[inputSubMarray reverseObjectEnumerator] allObjects];
+        NSArray <NSValue *> *preReverseSubArray = [[preSubMarray reverseObjectEnumerator] allObjects];
+        [preReverseSubArray enumerateObjectsUsingBlock:^(NSValue * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSRange preTextRange = [obj rangeValue];
+            NSString *preSubText = [previousText substringWithRange:preTextRange];
+            NSValue *inputValue = inputReverseSubArray[idx];
+            
+            if (preTextRange.location >= startRange.location) {
+                NSRange inputTextRange = [inputValue rangeValue];
+                NSString *inputSubText =  [inputText substringWithRange:inputTextRange];
+                if ([preSubText isEqualToString:inputSubText] == false) {
+                    endValue = inputValue;
+                    *stop = true;
+                }
+            } else {
+                endValue = inputValue;
+                *stop = true;
+            }
+        }];
+        NSRange endRange = [endValue rangeValue];
+        NSInteger differLength = endRange.location + endRange.length - startRange.location;
+        NSRange differRange = NSMakeRange(startRange.location, differLength);
+        differentText = [inputText substringWithRange:differRange];
+    }
+    
+    return differentText;
+}
+
+
++ (void)cursorLocation:(UIView <UITextInput>* )textInput index:(NSInteger)index {
+    NSRange range = NSMakeRange(index, 0);
+    
+    UITextPosition *start = [textInput positionFromPosition:[textInput beginningOfDocument] offset:range.location];
+    
+    UITextPosition *end = [textInput positionFromPosition:start offset:range.length];
+    
+    [textInput setSelectedTextRange:[textInput textRangeFromPosition:start toPosition:end]];
 }
 
 
 // 是否 包含 表情
-- (BOOL)isContainEmojiWithReplacementString:(NSString *)replacementString
-                            primaryLanguage:(NSString *)primaryLanguage {
-    if ([replacementString fjf_isContainEmoji]) {
+- (BOOL)isContainEmojiWithReplacementText:(NSString *)replaceText
+                          primaryLanguage:(NSString *)primaryLanguage {
+    if ([replaceText fjf_isContainEmoji]) {
         return YES;
     }
     if ([primaryLanguage isEqualToString:@"emoji"] ||
@@ -404,7 +518,6 @@
         if ((single >= '0' && single <= '9') || single == '.') {//数据格式正确
             if(inputText.length == 0){
                 if(single == '.') {
-                    [inputText stringByReplacingCharactersInRange:range withString:@""];
                     return NO;
                 }
             }
@@ -416,7 +529,6 @@
                     return YES;
                     
                 }else{
-                    [inputText stringByReplacingCharactersInRange:range withString:@""];
                     return NO;
                 }
             }else{
@@ -434,14 +546,11 @@
                 }
             }
         }else{//输入的数据格式不正确
-            [inputText stringByReplacingCharactersInRange:range withString:@""];
             return NO;
         }
     }
     return YES;
 }
-
-
 
 #pragma mark -------------------------- Setter / Getter
 - (void)setIntercepterNumberType:(FJFTextInputIntercepterNumberType)intercepterNumberType {

@@ -61,20 +61,18 @@ typedef NS_ENUM(NSUInteger, FJFTextInputIntercepterNumberType) {
 
  @param textInputView 输入框
  */
-- (void)textInputView:(UIView *)textInputView;
+- (void)textInputView:(UIView <UITextInput>*)textInputView;
 
-
-/// 更新 字符串
-/// @param previousText 字符串
-- (void)updatePreviousText:(NSString *)previousText;
-
+/// 更新  文本
+/// @param inputView 输入框
+- (void)updateTextWithInputView:(UIView <UITextInput>*)inputView;
 /**
  设置 拦截器和拦截的输入框
 
  @param textInputView 输入框
  @param intercepter 拦截器
  */
-+ (void)textInputView:(UIView *)textInputView setInputIntercepter:(FJFTextInputIntercepter *)intercepter;
++ (void)textInputView:(UIView <UITextInput>*)textInputView setInputIntercepter:(FJFTextInputIntercepter *)intercepter;
 
 /**
  生成 输入框 拦截器
@@ -83,5 +81,5 @@ typedef NS_ENUM(NSUInteger, FJFTextInputIntercepterNumberType) {
  @param beyoudLimitBlock 超过限制 回调
  @return 生成 输入框 拦截器
  */
-+ (FJFTextInputIntercepter *)textInputView:(UIView *)textInputView beyoudLimitBlock:(FJFTextInputIntercepterBlock)beyoudLimitBlock;
++ (FJFTextInputIntercepter *)textInputView:(UIView <UITextInput>*)textInputView beyoudLimitBlock:(FJFTextInputIntercepterBlock)beyoudLimitBlock;
 @end

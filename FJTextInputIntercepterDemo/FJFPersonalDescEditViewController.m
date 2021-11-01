@@ -1,5 +1,3 @@
-
-
 //
 //  FJFPersonalDescEditViewController.m
 //  FJTextInputIntercepterDemo
@@ -37,11 +35,14 @@ static const NSInteger kMaxWordLimitCount = 100;
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.introductionTextView];
     [self.view addSubview:self.digitalLabel];
-    self.introductionTextView.text = @"孩子，我要求你读书用功，不是因为我要你跟别人比成绩，";
-    [self.textInputIntercepter updatePreviousText:self.introductionTextView.text];
+    self.introductionTextView.text = @"孩子，我要求你读书用功，不是因为我要你跟别人比成绩，而是因为，我希望你将来会拥有选择的权利，选择有意义、有时间的工作，而不是被迫谋生。当你的工作在你心中有意义，你就有成就感。当你的工作给你时间，不剥夺你的生活，你就有尊严。成就感和尊严，给你快乐。";
+
+    [self.textInputIntercepter updateTextWithInputView:self.introductionTextView];
     [self.introductionTextView clearPlaceHoder];
     [self updateDigitalLabel];
 }
+
+
 
 #pragma mark - Public Methods
 
@@ -59,6 +60,7 @@ static const NSInteger kMaxWordLimitCount = 100;
     return [NSString stringWithFormat:@"%ld/%ld", digitalCnt, kMaxWordLimitCount];
 }
 
+
 #pragma mark - Setter / Getter
 
 // introductionTextView 个人简介
@@ -70,19 +72,21 @@ static const NSInteger kMaxWordLimitCount = 100;
         _introductionTextView.textColor = [UIColor colorWithRed:30/255.0f green:30/255.0f blue:30/255.0f alpha:1.0f];;
         _introductionTextView.tintColor = [UIColor colorWithRed:255/255.0f green:107/255.0f blue:0/255.0f alpha:1.0f];;
         _introductionTextView.textContainer.lineFragmentPadding = 0.0;
+
+        
         FJFTextInputIntercepter *textInputIntercepter = [[FJFTextInputIntercepter alloc] init];
         textInputIntercepter.maxCharacterNum = 100;
         textInputIntercepter.emojiAdmitted = NO;
         textInputIntercepter.doubleBytePerChineseCharacter = YES;
         __weak typeof(self) weakSelf = self;
-        
+
         textInputIntercepter.inputBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
             [weakSelf updateDigitalLabel];
         };
-        
-        
+
+
         textInputIntercepter.beyoudLimitBlock = ^(FJFTextInputIntercepter *textInputIntercepter, NSString *string) {
-            
+
         };
         [textInputIntercepter textInputView:_introductionTextView];
         _textInputIntercepter = textInputIntercepter;

@@ -55,45 +55,64 @@
     return NO;
 }
 
-// 是否 包含 表情
-+ (BOOL)fjf_stringContainsEmoji:(NSString *)string {
-    __block BOOL returnValue = NO;
-    if (string.length > 0) {
-        [string enumerateSubstringsInRange:NSMakeRange(0, [string length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:
-         ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop){
-             const unichar hs = [substring characterAtIndex:0];
-             // surrogate pair
-             if (0xd800 <= hs && hs <= 0xdbff){
-                 if (substring.length > 1){
-                     const unichar ls = [substring characterAtIndex:1];
-                     const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
-                     if (0x1d000 <= uc && uc <= 0x1f77f){
-                         returnValue = YES;
-                     }
-                 }
-             }
-             else if (substring.length > 1){
-                 const unichar ls = [substring characterAtIndex:1];
-                 if (ls == 0x20e3 || ls == 0xfe0f){
-                     returnValue = YES;
-                 }
-             }else{
-                 // non surrogate
-                 if (0x2100 <= hs && hs <= 0x27ff){
-                     returnValue = YES;
-                 }else if (0x2B05 <= hs && hs <= 0x2b07){
-                     returnValue = YES;
-                 }else if (0x2934 <= hs && hs <= 0x2935){
-                     returnValue = YES;
-                 }else if (0x3297 <= hs && hs <= 0x3299){
-                     returnValue = YES;
-                 }
-                 else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50){
-                     returnValue = YES;
-                 }
-             }
-         }];
++ (BOOL)fjf_stringContainsEmoji:(NSString *)string {//argument can be character or entire string
+    UILabel *characterRender = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
+    characterRender.text = string;
+    characterRender.backgroundColor = [UIColor blackColor];//needed to remove subpixel rendering colors
+    [characterRender sizeToFit];
+
+    CGRect rect = [characterRender bounds];
+    UIGraphicsBeginImageContextWithOptions(rect.size,YES,0.0f);
+    CGContextRef contextSnap = UIGraphicsGetCurrentContext();
+    [characterRender.layer renderInContext:contextSnap];
+    UIImage *capturedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    CGImageRef imageRef = [capturedImage CGImage];
+    NSUInteger width = CGImageGetWidth(imageRef);
+    NSUInteger height = CGImageGetHeight(imageRef);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    unsigned char *rawData = (unsigned char*) calloc(height * width * 4, sizeof(unsigned char));
+    NSUInteger bytesPerPixel = 4;
+    NSUInteger bytesPerRow = bytesPerPixel * width;
+    NSUInteger bitsPerComponent = 8;
+    CGContextRef context = CGBitmapContextCreate(rawData, width, height,
+                                                 bitsPerComponent, bytesPerRow, colorSpace,
+                                                 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    CGColorSpaceRelease(colorSpace);
+
+    CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
+    CGContextRelease(context);
+
+    BOOL colorPixelFound = NO;
+
+    int x = 0;
+    int y = 0;
+    while (y < height && !colorPixelFound) {
+        while (x < width && !colorPixelFound) {
+
+            NSUInteger byteIndex = (bytesPerRow * y) + x * bytesPerPixel;
+
+            CGFloat red = (CGFloat)rawData[byteIndex];
+            CGFloat green = (CGFloat)rawData[byteIndex+1];
+            CGFloat blue = (CGFloat)rawData[byteIndex+2];
+
+            CGFloat h, s, b, a;
+            UIColor *c = [UIColor colorWithRed:red green:green blue:blue alpha:1.0f];
+            [c getHue:&h saturation:&s brightness:&b alpha:&a];
+
+            b /= 255.0f;
+
+            if (b > 0) {
+                colorPixelFound = YES;
+            }
+
+            x++;
+        }
+        x=0;
+        y++;
     }
-    return returnValue;
+
+    return colorPixelFound;
 }
 @end
